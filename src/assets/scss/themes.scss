@@ -1,0 +1,95 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$custom-primary-palette: (
+  50: #e8eafd,
+  100: #c5cbfa,
+  200: #9fa8f7,
+  300: #7985f4,
+  400: #5c6bf2,
+  500: #435ff4,  // Color base
+  600: #3c57e8,
+  700: #344ddc,
+  800: #2d43d0,
+  900: #1f32b8,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  )
+);
+
+$light-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: mat.define-palette($custom-primary-palette, 500),
+      accent: mat.define-palette(mat.$indigo-palette, A400),
+      // warn: mat.define-palette()
+    ),
+    typography: mat.define-typography-config(),
+    density: 0,
+  )
+);
+
+$dark-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: mat.define-palette(mat.$deep-purple-palette, A200),
+      accent: mat.define-palette(mat.$pink-palette, 400),
+      // warn: mat.define-palette()
+    ),
+    typography: mat.define-typography-config(),
+    density: 0,
+  )
+);
+
+// Definir colores de la paleta primaria personalizada
+$primary-50: mat.get-color-from-palette($custom-primary-palette, 50);
+$primary-100: mat.get-color-from-palette($custom-primary-palette, 100);
+$primary-200: mat.get-color-from-palette($custom-primary-palette, 200);
+$primary-300: mat.get-color-from-palette($custom-primary-palette, 300);
+$primary-400: mat.get-color-from-palette($custom-primary-palette, 400);
+$primary-500: mat.get-color-from-palette($custom-primary-palette, 500);
+$primary-600: mat.get-color-from-palette($custom-primary-palette, 600);
+$primary-700: mat.get-color-from-palette($custom-primary-palette, 700);
+$primary-800: mat.get-color-from-palette($custom-primary-palette, 800);
+$primary-900: mat.get-color-from-palette($custom-primary-palette, 900);
+
+// Definir las variables CSS en el `:root`
+:root {
+  --primary-50: #{$primary-50};
+  --primary-100: #{$primary-100};
+  --primary-200: #{$primary-200};
+  --primary-300: #{$primary-300};
+  --primary-400: #{$primary-400};
+  --primary-500: #{$primary-500};
+  --primary-600: #{$primary-600};
+  --primary-700: #{$primary-700};
+  --primary-800: #{$primary-800};
+  --primary-900: #{$primary-900};
+}
+
+
+@include mat.all-component-themes($light-theme);
+
+.dark-mode {
+  @include mat.all-component-colors($dark-theme);
+  --primary-50: #{mat.get-color-from-palette(mat.$orange-palette, 50)};
+  --primary-100: #{mat.get-color-from-palette(mat.$orange-palette, 100)};
+  --primary-200: #{mat.get-color-from-palette(mat.$orange-palette, 200)};
+  --primary-300: #{mat.get-color-from-palette(mat.$orange-palette, 300)};
+  --primary-400: #{mat.get-color-from-palette(mat.$orange-palette, 400)};
+  --primary-500: #{mat.get-color-from-palette(mat.$orange-palette, 500)};
+  --primary-600: #{mat.get-color-from-palette(mat.$orange-palette, 600)};
+  --primary-700: #{mat.get-color-from-palette(mat.$orange-palette, 700)};
+  --primary-800: #{mat.get-color-from-palette(mat.$orange-palette, 800)};
+  --primary-900: #{mat.get-color-from-palette(mat.$orange-palette, 900)};
+}
