@@ -1,0 +1,29 @@
+<mat-sidenav-container class="sidenav-container">
+  <!-- Sidebar -->
+  <mat-sidenav #sidenav mode="side" opened class="sidenav">
+    <div class="sidenav-content">
+      <a mat-list-item routerLink="/calendar">📅 Calendario</a>
+      <a mat-list-item routerLink="/patient">👨‍⚕️ Pacientes</a>
+      <a mat-list-item routerLink="/product">🛒 Productos</a>
+      <a mat-list-item routerLink="/user">👤 Usuarios</a>
+    </div>
+  </mat-sidenav>
+
+  <!-- Navbar + Contenido -->
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span>Mi Aplicación</span>
+      <span class="spacer"></span>
+      <button mat-icon-button>
+        <mat-icon>account_circle</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <main>
+      <!-- <router-outlet></router-outlet> -->
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>
