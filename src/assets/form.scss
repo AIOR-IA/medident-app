@@ -1,0 +1,221 @@
+// --------------------------------------- form ---------------------------------------
+
+@mixin title($margin: 10px) {
+    margin-top: $margin;
+    display: flex;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+@mixin form-title() {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-size: 25px;
+    font-weight: 500;
+}
+
+@mixin view-form {
+    display: flex;
+    justify-content: center;
+}
+
+@mixin card-form($width: auto) {
+    background-color: $white;
+    width: $width;
+    margin-top: 10px;
+    margin-bottom: 50px;
+}
+
+@mixin form-distribution {
+    display: flex;
+    flex-direction: column;
+}
+
+@mixin form-field {
+    $width-input: 100%;
+    $height-input: 40px;
+    $border-input: 1px solid #C2C2C2;
+    $color-input: white;
+    margin-bottom: 20px;
+    $color-placeholder: #C2C2C2;
+    label {
+        width: $width-input;
+        margin-bottom: 0.3rem;
+        font-size: 14px;
+        font-weight: bold;
+    }
+    input {
+        width: $width-input;
+        height: $height-input;
+        padding-inline: 12px;
+        border: $border-input;
+        background-color: $color-input;
+        @include box-sizing();
+    }
+    select {
+        width: $width-input;
+        height: $height-input;
+        padding-inline: 12px;
+        border: $border-input;
+        background-color: $color-input;
+        @include arrow-select();
+    }
+}
+
+@mixin box-sizing {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+@mixin arrow-select {
+    @include box-sizing();
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url(../assets/img/arrow/down-arrow.svg);
+    background-position:
+      right 10px center;
+    background-size:
+      10px 10px,
+      10px 10px,
+      2.5em 2.5em;
+    background-repeat: no-repeat;
+}
+
+@mixin form-field-vertical($width-label: 80px) {
+    $height-input: 40px;
+    $border-input: 1px solid #C2C2C2;
+    $color-input: white;
+    margin-bottom: 20px;
+    label {
+        width: $width-label;
+        margin-bottom: 0.3rem;
+        font-size: 14px;
+        font-weight: bold;
+    }
+    input {
+        width: calc(100% - #{$width-label});
+        height: $height-input;
+        padding-inline: 12px;
+        border: $border-input;
+        background-color: $color-input;
+
+    }
+    select {
+        width: calc(100% - #{$width-label});
+        height: $height-input;
+        padding-inline: 12px;
+        border: $border-input;
+        background-color: $color-input;
+        @include arrow-select();
+    }
+}
+
+@mixin error-messages {
+    font-size: 12px;
+}
+
+
+// --------------------------------------- modals ---------------------------------------
+
+@mixin dialog() {
+    width: 552px;
+    position: relative;
+    padding: 30px;
+    .mat-dialog-title{
+        @include form-title;
+        font-weight: bold;
+    }
+    $width-button: 230px;
+    mat-dialog-actions{
+        display: flex;
+        justify-content: space-around;
+        .cancel-button{
+            @include cancel-button();
+            width: $width-button;
+        }
+        .success-button {
+            @include success-button();
+            width: $width-button;
+        }
+        .sky-blue-button {
+            @include sky-blue-button();
+            width: $width-button;
+        }
+        .disabled-button {
+          @include disabled-button();
+          width: $width-button;
+        }
+    }
+    .close-button{
+        position: absolute;
+        float: right;
+        top: -15px;
+        right: -15px;
+    }
+}
+
+// --------------------------------------- buttons ---------------------------------------
+@mixin button() {
+    border: none;
+    width: 200px;
+    height: 40px;
+    box-shadow: none;
+    border-radius: 0%
+}
+
+@mixin sky-blue-button {
+    @include button();
+    color: $white;
+    background-color: $blue;
+    &:hover {
+        background-color: $blue-pressed;
+    }
+}
+
+@mixin success-button($color: $second-color) {
+    @include button;
+    color: $white;
+    background-color: $color;
+    &:hover {
+        background-color: $second-color-pressed;
+    }
+}
+
+@mixin cancel-button {
+    @include button;
+    color: $second-color;
+    background-color: $white;
+    border: 1px solid $second-color;
+    &:hover {
+        background-color: $second-color;
+        color: $white;
+    }
+}
+
+@mixin black-button {
+    @include button;
+    color: $black;
+    background-color: $white;
+    border: 1px solid $black;
+    &:hover {
+        background-color: $black;
+        color: $white;
+    }
+}
+
+@mixin delete-button {
+    @include button;
+    color: $white;
+    background-color: $red;
+    &:hover {
+        background-color: $red-pressed;
+    }
+}
+
+@mixin disabled-button {
+  @include button;
+  color: $white;
+  background-color: $gray;
+}

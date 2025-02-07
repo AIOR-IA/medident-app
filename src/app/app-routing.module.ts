@@ -3,9 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent },
+  { path: 'login', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
 
-  { path: 'login', component: LoginComponent },
 
   {
     path: '',

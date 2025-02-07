@@ -1,0 +1,155 @@
+@import './form.scss';
+// --------------------------------------- container ---------------------------------------
+@mixin container {
+    margin-inline: 15%;
+   @media (max-width: 1400px) {
+       margin-inline: 10%;
+    }
+    .title {
+        font-weight: bold;
+    }
+    .label {
+      font-weight: bold;
+    }
+}
+
+// --------------------------------------- filters ---------------------------------------
+
+@mixin filter() {
+    $width-button: 200px;
+    .form-field {
+        @include form-field();
+        label {
+            font-weight: 500;
+        }
+        input {
+            font-size:14px;
+        }
+        .error {
+            @include error-messages();
+        }
+    }
+    button {
+        width: $width-button;
+        justify-self: end;
+    }
+    display: grid;
+    grid-auto-flow:column;
+    grid-gap: 15px;
+    align-items: center;
+}
+
+@mixin input($width: auto) {
+    margin-left: 5px;
+    width: $width;
+}
+
+
+// --------------------------------------- table ---------------------------------------
+
+@mixin table-view {
+    margin-top: 5vh;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-direction: center;
+    .mat-row:nth-child(even){
+       background-color: $white;
+    }
+    .mat-row:not(:nth-child(odd)){
+       background-color:#F8FAFB;
+    }
+    .mat-row:hover {
+        background-color: #EDF7F8;
+        mat-cell:first-child {
+            border-left: 7px solid #149B9E;
+        }
+    }
+
+}
+
+@mixin header-table {
+    background-color: $second-color;
+    color: $white;
+    font-size: 14px;
+    justify-content: left;
+
+}
+
+@mixin cell-distribution {
+    justify-content: left;
+    margin-right: 7px;
+}
+
+@mixin scroll-table($minWidth: 140px) {
+    .mat-elevation-z3 {
+        overflow-x: scroll;
+        mat-cell, mat-header-cell {
+            min-width: $minWidth;
+            font-size: 12px;
+        }
+    }
+}
+
+// --------------------------------------- buttons ---------------------------------------
+
+@mixin new-button {
+    margin-top: 5px;
+    margin-left: 79vw;
+    color: $second-color;
+    border-color: $second-color;
+    background-color: $white;
+    width: 6vw;
+    padding: 3px;
+    &:hover {
+        color: $white;
+        border-color: $white;
+        background-color: $second-color;
+    }
+}
+
+@mixin order-button {
+    border-color: transparent;
+    background-color: transparent;
+    color: $white;
+    .material-icons-outlined {
+        font-size: 20px;
+    }
+    &:hover {
+        .material-icons-outlined {
+            font-weight: 900;
+            font-size: 23px;
+        }
+    }
+}
+
+@mixin order-button-touched {
+    border-color: transparent;
+    background-color: transparent;
+    color: $white;
+    .material-icons-outlined {
+        font-weight: 900;
+            font-size: 23px;
+    }
+}
+
+
+@mixin action-button($color: $blue) {
+    color: $gray;
+    &:hover {
+        color: $color;
+    }
+}
+
+@mixin status-button($color) {
+    color: $color;
+    background-color: transparent;
+    border: 0.3px solid $color;
+    &:hover {
+        color: $white;
+        background-color: $color;
+        border-color: $color;
+    }
+}

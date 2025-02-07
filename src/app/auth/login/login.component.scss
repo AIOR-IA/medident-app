@@ -1,0 +1,78 @@
+@import '../../../assets/colors.scss';
+@import '../../../assets/form.scss';
+
+:host {
+  display: block;
+  background-color: $bg-color;
+  min-height: 100vh;
+}
+.login {
+  @include view-form();
+  padding-top: 10%;
+
+  mat-card{
+    border-radius: 0px;
+    box-shadow: 0 2px 4px 1px rgba(100, 100, 100, 0.2);
+  }
+  .card-login {
+    @include card-form(500px);
+    height: 500px;
+    padding-left: 3.5%;
+    padding-right: 3.5%;
+    padding-top: 3.0%;
+    padding-bottom: 3.2%;
+    .form-login {
+      .container {
+        @include form-distribution();
+        @include form-field();
+        width: 340px;
+        height: 330px;
+        padding-top: 5%;
+        h1{
+          @include title();
+        }
+        @include form-distribution();
+        .form-field {
+            @include form-field();
+            .error {
+                @include error-messages();
+            }
+        }
+        .field-name{
+          padding-top: 20px;
+          padding-bottom: 3%;
+          font-size: 14px;
+          font-weight: 550;
+        }
+        button {
+          margin-top: 10%;
+          padding: 0.8rem;
+        }
+        .login-button {
+          @include success-button();
+          width: 100%;
+        }
+        .placeholder{
+          position: absolute;
+          top: 10px;
+          bottom: 0;
+          height: 24px;
+          font-size: 18px;
+          right: 5px;
+          margin: auto;
+          opacity: 0.2;
+        }
+        .input-placeholder {
+          position: relative;
+        }
+        .error{
+          position: absolute;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+
+
