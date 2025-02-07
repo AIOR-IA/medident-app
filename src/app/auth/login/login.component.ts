@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 // import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { validationPatternEmail, validationPatternPassword } from 'src/app/shared/utils/validation.utils';
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
@@ -9,6 +10,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
   loginForm!: UntypedFormGroup;
+  private fb = inject(FormBuilder);
   hide = true;
 
   constructor(
@@ -21,14 +23,21 @@ export class LoginComponent {
     // if (this.authService.isLogged() && this.authService.isLoggedAndAllowed()) {
     //   this.router.navigate(['vehicles']);
     // }
-    this.loginForm = new UntypedFormGroup({
-      username: new UntypedFormControl(null, [Validators.required]),
-      password: new UntypedFormControl(null, [Validators.required])
+
+    this.loginForm = this.fb.group({
+      email: new FormControl('', [Validators.required, Validators.pattern(validationPatternEmail)]),
+      password: new FormControl('', [Validators.required, Validators.pattern(validationPatternPassword)])
     });
   }
 
   public login(): void {
+    if(this.loginForm.invalid) {
+      console.log(this.loginForm.value);
+      this.loginForm.markAllAsTouched();
+      return;
+    }
     if (this.loginForm.valid) {
+      console.log(this.loginForm.value);
       this.trimValues();
       // this.authService.getToken(this.loginForm.value).pipe(
       //   map(token => this.router.navigate(['vehicles']))
@@ -45,7 +54,7 @@ export class LoginComponent {
 
   private trimValues() {
     this.loginForm.patchValue({
-      username: this.loginForm.get('username')?.value.trim(),
+      email: this.loginForm.get('email')?.value.trim(),
       password: this.loginForm.get('password')?.value.trim()
     })
   }

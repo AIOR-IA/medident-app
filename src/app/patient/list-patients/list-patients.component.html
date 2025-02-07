@@ -1,1 +1,136 @@
-<p>list-patients works!</p>
+<div class="users">
+  <h2 class="title">Lista de Pacientes</h2>
+  <h6 class="label">Filtrar por:</h6>
+  <div class="filters">
+      <div class="form-field">
+          <label>Nombre o Apellido: </label>
+          <input matInput class="code" type="text"
+              placeholder="Full Name" >
+      </div>
+      <!-- <div class="form-field">
+          <label>Rol:</label>
+          <input matInput class="role" type="text"
+              placeholder="Rol Super Admin" >
+      </div>
+      <div class="form-field">
+          <label>Ciudad: </label>
+          <select class="city" >
+              <option value="">Todas</option>
+              <option *ngFor="let city of cities" value="{{city.id}}">
+                  {{city.name}}</option>
+          </select>
+      </div>
+      <div class="form-field">
+          <label>Estado: </label>
+          <select class="type" >
+              <option value="">Todos</option>
+          </select>
+      </div> -->
+      <button mat-raised-button type="button" class="filter-button" >
+          <mat-icon>
+              clear
+          </mat-icon>
+      </button>
+      <button mat-raised-button type="button" class="add-button" (click)="goToCreateUser()">+ Nuevo Paciente</button>
+  </div>
+  <div class="user-list">
+      <mat-table [dataSource]="users" class="mat-elevation-z3">
+          <ng-container matColumnDef="userFullName">
+              <mat-header-cell *matHeaderCellDef>Nombres
+                  <div>
+                      <button  [ngClass]="{'order-button': !statuses.fullName, 'order-button-touched': statuses.fullName}">
+                        <mat-icon class="material-icons-outlined">{{ orderFullName == 'ASC' ? 'arrow_drop_up' : 'arrow_drop_down' }}</mat-icon>
+                      </button>
+                  </div>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let user">{{user.firstName}} {{user.lastName}}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="userUsername">
+              <mat-header-cell *matHeaderCellDef>Edad
+                  <div>
+                      <button  [ngClass]="{'order-button': !statuses.username, 'order-button-touched': statuses.username}">
+                        <mat-icon class="material-icons-outlined">{{ orderUsername == 'ASC' ? 'arrow_drop_up' : 'arrow_drop_down' }}</mat-icon>
+                      </button>
+                  </div>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let user">{{user.username}}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="userEmail">
+              <mat-header-cell *matHeaderCellDef>Telefono
+                  <div>
+                      <button  [ngClass]="{'order-button': !statuses.email, 'order-button-touched': statuses.email}">
+                        <mat-icon class="material-icons-outlined">{{ orderEmail == 'ASC' ? 'arrow_drop_up' : 'arrow_drop_down' }}</mat-icon>
+                      </button>
+                  </div>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let user">{{user.email}}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="userRole">
+              <mat-header-cell *matHeaderCellDef>Fecha Ingreso
+                  <div>
+                      <button  [ngClass]="{'order-button': !statuses.role, 'order-button-touched': statuses.role}">
+                        <mat-icon class="material-icons-outlined">{{ orderRole == 'ASC' ? 'arrow_drop_up' : 'arrow_drop_down' }}</mat-icon>
+                      </button>
+                  </div>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let user">
+                  <!-- <div *ngIf="user.role === RoleType.ADMIN">Administrador</div>
+                  <div *ngIf="user.role === RoleType.SUPERADMIN">Super-Administrador</div>
+                  <div *ngIf="user.role === RoleType.PICKER">Despachador</div> -->
+              </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="userStatus">
+              <mat-header-cell *matHeaderCellDef>Monto
+                  <div>
+                      <button  [ngClass]="{'order-button': !statuses.status, 'order-button-touched': statuses.status}">
+                        <mat-icon class="material-icons-outlined">{{ orderStatus == 'ASC' ? 'arrow_drop_up' : 'arrow_drop_down' }}</mat-icon>
+                      </button>
+                  </div>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let user">
+                  <div *ngIf="user.status === 1">
+                      <button mat-raised-button  class="activeButton"
+                      matBadge="8" matBadgePosition="before" matBadgeColor="accent">
+                      <mat-icon class="material-icons-outlined">
+                          sentiment_very_satisfied
+                      </mat-icon>
+                  </button>
+                  </div>
+                  <div *ngIf="user.status !== 1">
+                      <button mat-raised-button class="inactiveButton"
+                      matBadge="8" matBadgePosition="before" matBadgeColor="accent">
+                      <mat-icon class="material-icons-outlined">
+                          sentiment_very_dissatisfied
+                      </mat-icon>
+                  </button>
+                  </div>
+              </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="userCity">
+              <mat-header-cell *matHeaderCellDef>Color
+                  <div>
+                      <button  [ngClass]="{'order-button': !statuses.city, 'order-button-touched': statuses.city}">
+                        <mat-icon class="material-icons-outlined">{{ orderCity == 'ASC' ? 'arrow_drop_up' : 'arrow_drop_down' }}</mat-icon>
+                      </button>
+                  </div>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let user">{{user.city?.name}}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="userActions">
+              <mat-header-cell *matHeaderCellDef class="header">Acciones</mat-header-cell>
+              <mat-cell *matCellDef="let user" >
+                  <button mat-button  class="actionButton" title="Editar">
+                      <mat-icon>
+                          edit
+                      </mat-icon>
+                  </button>
+              </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: tableColumns"></mat-row>
+      </mat-table>
+      <br>
+      <div *ngIf="users.data.length === 0" class="empty"> No se encontraron pacientes</div>
+  </div>
+  <mat-paginator [pageSizeOptions]="[10, 20, 50]" (page)="changeSize($event)"></mat-paginator>
+</div>

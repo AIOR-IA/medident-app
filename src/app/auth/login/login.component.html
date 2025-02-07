@@ -3,17 +3,17 @@
     <form [formGroup]="loginForm" (ngSubmit)="login()" novalidate class="form-login">
       <div class="container">
         <h1>
-          Iniciar Sesións
+          Iniciar Sesión
         </h1>
         <div class="form-field">
-          <label class="field-name">Usuario</label>
+          <label class="field-name">Correo</label>
           <span class="input-placeholder">
-            <input placeholder="" formControlName="username" maxlength="51">
-            <mat-error *ngIf="loginForm.controls['username'].touched">
-              <div *ngIf="loginForm.get('username')?.hasError('required')" class="error">Campo nombre de usuario es
+            <input placeholder="" formControlName="email" maxlength="51">
+            <mat-error *ngIf="loginForm.controls['email'].touched">
+              <div *ngIf="loginForm.get('email')?.hasError('required')" class="error">Campo correo es
                 requerido</div>
-                <div *ngIf="loginForm.get('username')?.hasError('maxlength')" class="error">Nombre de usuario debe tener
-                  50 caracteres o menos</div>
+                <!-- <div *ngIf="loginForm.get('email')?.hasError('maxlength')" class="error">Nombre de usuario debe tener
+                  50 caracteres o menos</div> -->
                 </mat-error>
               </span>
             </div>

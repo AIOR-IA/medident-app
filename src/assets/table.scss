@@ -1,9 +1,9 @@
 @import './form.scss';
 // --------------------------------------- container ---------------------------------------
 @mixin container {
-    margin-inline: 15%;
+    margin-inline: 10%;
    @media (max-width: 1400px) {
-       margin-inline: 10%;
+       margin-inline: 6%;
     }
     .title {
         font-weight: bold;

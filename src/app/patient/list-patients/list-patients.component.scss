@@ -1,0 +1,59 @@
+@import '../../../assets/colors.scss';
+@import '../../../assets/table.scss';
+
+.users {
+    @include container();
+    .title{
+        font-size: 32px;
+        margin-block: 70px;
+    }
+    .filters {
+        @include filter();
+        .filter-button {
+          @include success-button();
+          font-size: 5px;
+          margin-top: 5px;
+          width: 12px;
+          justify-self: start;
+          border-radius: 15%;
+        }
+        .add-button {
+          @include sky-blue-button();
+          margin-top: 5px;
+          width: 100%;
+        }
+    }
+    .user-list {
+      @include table-view();
+      .mat-elevation-z3 {
+          width: 100%;
+          mat-header-cell {
+              @include header-table();
+          }
+          mat-cell {
+              @include cell-distribution();
+          }
+          .order-button {
+              @include order-button();
+          }
+          .order-button-touched {
+              @include order-button-touched();
+          }
+          .actionButton {
+              @include action-button();
+          }
+          .removeButton {
+              @include action-button($red);
+          }
+          .activeButton{
+            @include status-button($second-color);
+          }
+          .inactiveButton{
+            @include status-button($red);
+          }
+      }
+      .empty {
+          font-size: 20px;
+      }
+  }
+}

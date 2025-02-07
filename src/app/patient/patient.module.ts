@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ListPatientsComponent } from './list-patients/list-patients.component';
 import { LayoutComponent } from './layout/layout.component';
 import { PatientRoutingModule } from './patient-routing.module';
+import { MaterialModule } from '../material/material.module';
 
 
 
@@ -14,6 +15,7 @@ import { PatientRoutingModule } from './patient-routing.module';
   imports: [
     CommonModule,
     PatientRoutingModule,
+    MaterialModule,
 
   ]
 })
