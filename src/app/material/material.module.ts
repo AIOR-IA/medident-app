@@ -8,7 +8,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogContent, MatDialogModule } from '@angular/material/dialog';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -34,12 +34,13 @@ import { MatListModule } from '@angular/material/list';
     ReactiveFormsModule,
     MatTableModule,
     MatPaginatorModule,
-    MatIconModule,
     MatSidenavModule,
     MatDividerModule,
     MatNativeDateModule,
     MatListModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSnackBarModule,
+    MatIconModule,
   ],
   exports: [
     MatCardModule,
@@ -52,13 +53,14 @@ import { MatListModule } from '@angular/material/list';
     ReactiveFormsModule,
     MatTableModule,
     MatPaginatorModule,
-    MatIconModule,
     MatSidenavModule,
     MatDividerModule,
     MatDatepickerModule,
     MatNativeDateModule,
     MatListModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSnackBarModule,
+    MatIconModule,
   ]
 })
 export class MaterialModule { }

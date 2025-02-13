@@ -1,17 +1,18 @@
 export type RoleUser = 'admin' | 'user';
 export interface User {
   //change UUID
-  id: string
+  uid?: string
   firstName: string;
   lastName: string;
   ci: string;
   email: string;
   phoneNumber: string;
-  totalEvents: number;
+  totalEvents?: number;
   color:string;
-  isActive: boolean;
-  createdAt: Date;
+  isActive?: boolean;
+  createdAt?: Date;
   address: string;
   role: RoleUser;
-  password: string;
+  password?: string;
+  idDoc?: string;
 }

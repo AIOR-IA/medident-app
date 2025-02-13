@@ -7,5 +7,5 @@ export const environment = {
     storageBucket: "medident-app-f25a2.firebasestorage.app",
     messagingSenderId: "138784398253",
     appId: "1:138784398253:web:90e838447b8f1a1d5f5f24"
-  } // URL de producción
+  } // Cambia según tu configuración
 };

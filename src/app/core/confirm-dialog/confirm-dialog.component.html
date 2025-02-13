@@ -1,0 +1,15 @@
+<div class="dialog">
+  <h2 mat-dialog-title>{{ data.title }}</h2>
+  <mat-dialog-content>
+    <p [innerHTML]="data.description"></p>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-dialog-close [ngClass]="data.btnCancel.class">{{ data.btnCancel.text }}</button>
+    <button mat-button [ngClass]="data.btnConfirm.class" (click)="onAction(true)" cdkFocusInitial>
+      {{ data.btnConfirm.text }}
+    </button>
+  </mat-dialog-actions>
+  <button mat-icon-button class="close-button" [mat-dialog-close]="false">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>

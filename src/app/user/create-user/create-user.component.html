@@ -1,0 +1,217 @@
+<div class="dialog">
+  <h2 mat-dialog-title>Crear Usuario</h2>
+  <mat-dialog-content>
+    <form [formGroup]="userForm" class="form">
+      <div class="form-field">
+        <label>Nombre:</label>
+        <input matInput type="text" formControlName="firstName" name="firstName" placeholder="Nombre (Juan)"
+          id="firstName" maxlength="50" required />
+        <mat-error *ngIf="
+            (userForm.get('firstName')?.touched ||
+              userForm.get('firstName')?.dirty) &&
+            userForm.get('firstName')?.errors &&
+            userForm.get('firstName')?.invalid
+          ">
+          <div *ngIf="userForm.get('firstName')?.hasError('required')" class="error">
+            Campo nombre es requerido
+          </div>
+          <div *ngIf="userForm.get('firstName')?.hasError('pattern')" class="error">
+            El campo nombre no debe contener números ni símbolos
+          </div>
+          <div *ngIf="userForm.get('firstName')?.hasError('maxlength')" class="error">
+            Nombre debe tener 50 caracteres o menos
+          </div>
+          <div *ngIf="userForm.get('firstName')?.hasError('minlength')" class="error">
+            Se requieren mínimo 3 caracteres
+          </div>
+        </mat-error>
+      </div>
+      <div class="form-field">
+        <label>Apellido:</label>
+        <input matInput type="text" formControlName="lastName" name="lastName" placeholder="Apellido (Perez)"
+          id="lastName" maxlength="50" required />
+        <mat-error *ngIf="
+            (userForm.get('lastName')?.touched ||
+              userForm.get('lastName')?.dirty) &&
+            userForm.get('lastName')?.errors &&
+            userForm.get('lastName')?.invalid
+          ">
+          <div *ngIf="userForm.get('lastName')?.hasError('required')" class="error">
+            Campo apellido es requerido
+          </div>
+          <div *ngIf="userForm.get('lastName')?.hasError('pattern')" class="error">
+            El campo apellido no debe contener números ni símbolos
+          </div>
+          <div *ngIf="userForm.get('lastName')?.hasError('maxlength')" class="error">
+            Apellido debe tener 50 caracteres o menos
+          </div>
+          <div *ngIf="userForm.get('lastName')?.hasError('minlength')" class="error">
+            Se requieren mínimo 3 caracteres
+          </div>
+        </mat-error>
+      </div>
+      <div class="form-field">
+        <label>Teléfono:</label>
+        <input matInput type="text" formControlName="phoneNumber" name="phoneNumber" placeholder="Teléfono (78787878)"
+          id="phoneNumber" maxlength="8" required />
+        <mat-error *ngIf="
+            (userForm.get('phoneNumber')?.touched ||
+              userForm.get('phoneNumber')?.dirty) &&
+            userForm.get('phoneNumber')?.errors &&
+            userForm.get('phoneNumber')?.invalid
+          ">
+          <div *ngIf="userForm.get('phoneNumber')?.hasError('required')" class="error">
+            Campo teléfono es requerido
+          </div>
+          <div *ngIf="userForm.get('phoneNumber')?.hasError('pattern')" class="error">
+            El campo teléfono no debe contener símbolos y tener 8 digitos
+          </div>
+        </mat-error>
+      </div>
+      <div class="form-field">
+        <label>Email:</label>
+        <input matInput type="text" formControlName="email" name="email" placeholder="Correo (jose.perez@gmail.com)"
+          id="email" maxlength="50" required />
+        <mat-error *ngIf="
+            (userForm.get('email')?.touched ||
+              userForm.get('email')?.dirty) &&
+            userForm.get('email')?.errors &&
+            userForm.get('email')?.invalid
+          ">
+          <div *ngIf="userForm.get('email')?.hasError('required')" class="error">
+            Campo correo es requerido
+          </div>
+          <div *ngIf="userForm.get('email')?.hasError('pattern')" class="error">
+            Correo inválido
+          </div>
+        </mat-error>
+      </div>
+      <div class="form-field">
+        <label>Carnet de Identidad:</label>
+        <input matInput type="text" formControlName="ci" name="ci" placeholder="Ci (1244877)"
+          id="ci" maxlength="50" required />
+        <mat-error *ngIf="
+            (userForm.get('ci')?.touched ||
+              userForm.get('ci')?.dirty) &&
+            userForm.get('ci')?.errors &&
+            userForm.get('ci')?.invalid
+          ">
+          <div *ngIf="userForm.get('ci')?.hasError('required')" class="error">
+            Campo carnet de identidad es requerido
+          </div>
+
+        </mat-error>
+      </div>
+      <div class="form-field">
+        <label>Dirección:</label>
+        <input matInput type="text" formControlName="address" name="address" placeholder="Dirección (Av Villazón #105)"
+          id="address" maxlength="50" required />
+        <mat-error *ngIf="
+            (userForm.get('address')?.touched ||
+              userForm.get('address')?.dirty) &&
+            userForm.get('address')?.errors &&
+            userForm.get('address')?.invalid
+          ">
+          <div *ngIf="userForm.get('address')?.hasError('required')" class="error">
+            Campo dirección es requerido
+          </div>
+          <div *ngIf="userForm.get('address')?.hasError('maxlength')" class="error">
+            Dirección debe tener 100 caracteres o menos
+          </div>
+        </mat-error>
+      </div>
+      <div class="form-field">
+        <label>Tipo de Rol</label>
+        <select class="sel-primary" formControlName="role" required>
+          <option class="option-values" value="" selected disabled>Seleccione un tipo de rol</option>
+          <option class="option-values" *ngFor="let roles of TypeRole" [ngValue]="roles.value">
+            {{ roles.display }}
+          </option>
+        </select>
+        <mat-error *ngIf="
+            (userForm.get('role')?.touched ||
+              userForm.get('role')?.dirty) &&
+            userForm.get('role')?.errors &&
+            userForm.get('role')?.invalid
+          ">
+          <div *ngIf="userForm.get('role')?.hasError('required')" class="error">
+            Campo tipo de rol es requerido
+          </div>
+        </mat-error>
+      </div>
+      <div class="form-field">
+        <label>Color: </label>
+        <select class="sel-primary" formControlName="color" required>
+          <option class="option-values" value="" selected disabled>Seleccione un Color</option>
+          <option class="option-values" *ngFor="let colors of ColorType" [ngValue]="colors.value">
+            {{ colors.display }}
+          </option>
+        </select>
+        <mat-error *ngIf="(userForm.get('color')?.touched ||
+                           userForm.get('color')?.dirty) &&
+                           userForm.get('color')?.errors &&
+                           userForm.get('color')?.invalid"
+        >
+          <div *ngIf="userForm.get('color')?.hasError('required')" class="error">
+            Campo tipo de color es requerido
+          </div>
+        </mat-error>
+      </div>
+      <div class="form-field" *ngIf="!hasAccount || changePasswordFields">
+        <label>Contraseña:</label>
+        <input matInput type="password" formControlName="password" name="password" placeholder="Contraseña"
+          id="password" minlength="6" maxlength="10" required>
+        <mat-error *ngIf="(userForm.get('password')?.touched ||
+                          userForm.get('password')?.dirty) &&
+                          userForm.get('password')?.errors &&
+                          userForm.get('password')?.invalid">
+          <div *ngIf="userForm.get('password')?.hasError('required')" class="error">
+            Campo contraseña es requerido
+          </div>
+          <div *ngIf="userForm.get('password')?.hasError('maxlength')" class="error">
+            Debe tener menos de 10 caracteres.
+          </div>
+          <div *ngIf="userForm.get('password')?.hasError('minlength')" class="error">
+            Se requieren mínimo 6 caracteres
+          </div>
+          <div *ngIf="userForm.get('password')?.hasError('pattern')" class="error">
+            Debe tener minúsculas y al menos una mayúscula.
+          </div>
+        </mat-error>
+      </div>
+      <div class="form-field" *ngIf="!hasAccount || changePasswordFields">
+        <label>Confirmar contraseña:</label>
+        <input matInput type="password" formControlName="confirmPassword" name="confirmPassword"
+          placeholder="Confirmar contraseña" id="confirmPassword" minlength="6" maxlength="10" required>
+        <mat-error *ngIf="(confirmPassword?.touched || confirmPassword?.dirty) &&
+                            confirmPassword?.errors &&
+                            confirmPassword?.invalid">
+          <div *ngIf="userForm.get('confirmPassword')?.hasError('required')" class="error">
+            Campo contraseña es requerido
+          </div>
+          <div *ngIf="userForm.get('confirmPassword')?.hasError('passwordMismatch')" class="error">
+            Las contraseñas no coinciden
+          </div>
+          <div *ngIf="userForm.get('confirmPassword')?.hasError('maxlength')" class="error">
+            Debe tener menos de 10 caracteres.
+          </div>
+          <div *ngIf="userForm.get('confirmPassword')?.hasError('minlength')" class="error">
+            Se requieren mínimo 6 caracteres
+          </div>
+          <div *ngIf="userForm.get('confirmPassword')?.hasError('pattern')" class="error">
+            Debe tener un número, una mayúscula y una minúscula.
+          </div>
+        </mat-error>
+      </div>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close class="cancel-button" (mousedown)="false">Cancelar</button>
+    <button mat-button class="success-button" type="submit" (click)="saveUser()">
+      Actualizar
+    </button>
+  </mat-dialog-actions>
+  <button mat-icon-button class="close-button" [mat-dialog-close]="true" (mousedown)="false">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>

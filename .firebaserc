@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "medident-app-f25a2": {
+      "hosting": {
+        "medident-app": [
+          "medident-app"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "medident-app-f25a2"
+  }
+}

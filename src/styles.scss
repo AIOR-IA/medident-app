@@ -6,7 +6,7 @@
 // );
 
 @import "../node_modules/bootstrap/scss/bootstrap.scss"; // 🟢 Después de @use
-
+@import "assets/colors.scss";
 // @font-face {
 //   font-family: "Nunito";
 //   src: local("Nunito"), url(./assets/fonts/Nunito/Nunito-Regular.ttf) format("truetype");
@@ -19,6 +19,7 @@ body {
     margin: 0;
     font-family: "Nunito", sans-serif;
     font-size: 14px;
+    background-color: #fafafa;
 }
 .cdk-overlay-pane {
 
@@ -29,4 +30,8 @@ body {
     @media (max-width: 500px) {
         bottom: 0 !important;
     }
+}
+
+.mat-mdc-snack-bar-container .mat-mdc-snack-bar-action {
+  color: rgb(23, 150, 255) !important;
 }

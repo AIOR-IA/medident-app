@@ -5,7 +5,7 @@
     @include container();
     .title{
         font-size: 32px;
-        margin-block: 70px;
+        margin-block: 50px;
     }
     .filters {
         @include filter();
@@ -16,6 +16,7 @@
           width: 12px;
           justify-self: start;
           border-radius: 15%;
+          text-align: center
         }
         .add-button {
           @include sky-blue-button();
@@ -46,7 +47,7 @@
               @include action-button($red);
           }
           .activeButton{
-            @include status-button($second-color);
+            @include status-button($color-status);
           }
           .inactiveButton{
             @include status-button($red);
@@ -56,4 +57,81 @@
           font-size: 20px;
       }
   }
+}
+
+::ng-deep .mat-mdc-raised-button>.mat-icon {
+  margin: 0;
+}
+
+
+mat-row.mat-mdc-row {
+  border-bottom: 0.2px solid rgba($color: #202020, $alpha: 0.4);
+}
+
+
+mat-cell {
+ margin-right: 0 !important;
+}
+
+// mat-table {
+//   width: 100%;
+//   table-layout: fixed; /* 🔹 Esto evita que los anchos se modifiquen automáticamente */
+//   text-align: center;
+// }
+
+.mat-column-userFullName{
+  min-width: auto;
+  max-width: auto;
+  text-align: start;
+}
+
+.mat-column-userEmail{
+  min-width: auto;
+  max-width: auto;
+  text-align: start;
+}
+
+.mat-column-userTotalEvents {
+  min-width: 60px;
+  max-width: 80px;
+  justify-content: center !important;
+  text-align: center;
+}
+
+.mat-column-userPhoneNumer {
+  min-width: 80px;
+  max-width: 90px;
+  justify-content: center !important;
+  text-align: center;
+}
+
+.mat-column-userColor {
+  min-width: 60px;
+  max-width: 80px;
+  justify-content: center !important;
+
+
+}
+
+.mat-column-userRole {
+  min-width: 60px;
+  max-width: 120px;
+
+}
+
+
+.mat-column-userStatus {
+  min-width: 120px;
+  max-width: 120px;
+  justify-content: center !important;
+
+
+}
+
+.mat-column-userActions {
+  min-width: 80px;
+  max-width: 80px;
+  justify-content: center !important;
+  text-align: center;
+
 }

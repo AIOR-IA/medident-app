@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, inject, OnInit, signal, Vi
 import { CalendarService } from './services/calendar.service';
 
 
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 
 //full calendar imports
 import { FullCalendarComponent } from '@fullcalendar/angular';
@@ -193,11 +193,11 @@ export class CalendarComponent implements OnInit, AfterViewInit{
       });
 
       // Mostrar alerta de éxito
-      Swal.fire({
-        title: "Evento agregado!",
-        text: `Evento de ${title} añadido correctamente.`,
-        icon: "success"
-      });
+      // Swal.fire({
+      //   title: "Evento agregado!",
+      //   text: `Evento de ${title} añadido correctamente.`,
+      //   icon: "success"
+      // });
     }
   }
 
@@ -238,11 +238,11 @@ export class CalendarComponent implements OnInit, AfterViewInit{
     });
 
     // Mensaje de confirmación
-    Swal.fire({
-      title: "Evento agregado!",
-      text: `Evento de ${user ? user.name : title} añadido correctamente.`,
-      icon: "success"
-    });
+    // Swal.fire({
+    //   title: "Evento agregado!",
+    //   text: `Evento de ${user ? user.name : title} añadido correctamente.`,
+    //   icon: "success"
+    // });
   }
   addEventFromForm() {
     if (this.selectedDate && this.selectedStartTime && this.selectedEndTime) {

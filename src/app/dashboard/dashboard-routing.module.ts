@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LayoutComponent } from './layout/layout.component';
+import { AppLayoutComponent } from './layout/layout.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: LayoutComponent, // Contiene el sidebar y el router-outlet
+    component: AppLayoutComponent, // Contiene el sidebar y el router-outlet
     children: [
       {
         path: 'calendar',

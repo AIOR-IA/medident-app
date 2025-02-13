@@ -4,30 +4,29 @@
       <div class="container">
         <h1>
           Iniciar Sesión
+
         </h1>
         <div class="form-field">
           <label class="field-name">Correo</label>
           <span class="input-placeholder">
-            <input placeholder="" formControlName="email" maxlength="51">
+            <input matInput placeholder="" name="email" id="email" formControlName="email" maxlength="50" autocomplete="on" type="text" required>
             <mat-error *ngIf="loginForm.controls['email'].touched">
               <div *ngIf="loginForm.get('email')?.hasError('required')" class="error">Campo correo es
                 requerido</div>
-                <!-- <div *ngIf="loginForm.get('email')?.hasError('maxlength')" class="error">Nombre de usuario debe tener
-                  50 caracteres o menos</div> -->
                 </mat-error>
               </span>
             </div>
             <div class="form-field">
               <label class="field-name">Contraseña</label>
               <span class="input-placeholder">
-                <input type="password" formControlName="password" maxlength="51" [type]="hide ? 'password' : 'text'">
+                <input type="password" formControlName="password" maxlength="10" minlength="6" [type]="hide ? 'password' : 'text'" autocomplete="current-password">
                 <mat-icon class='placeholder' matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}
                 </mat-icon>
                 <mat-hint *ngIf="!passwordInput?.value"></mat-hint>
                 <mat-error *ngIf="loginForm.controls['password'].touched">
                   <div *ngIf="loginForm.get('password')?.hasError('required')" class="error">Campo contraseña es requerido
                   </div>
-                  <div *ngIf="loginForm.get('password')?.hasError('maxlength')" class="error">Contraseña debe tener 50
+                  <div *ngIf="loginForm.get('password')?.hasError('maxlength')" class="error">Contraseña debe tener 10
                     caracteres o menos</div>
                   </mat-error>
                 </span>
@@ -36,5 +35,6 @@
             [disabled]="!loginForm.valid">Ingresar</button>
       </div>
     </form>
+
   </mat-card>
 </div>

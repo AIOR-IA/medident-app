@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
 interface SidebarItem {
   title: string;
@@ -11,7 +13,8 @@ interface SidebarItem {
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit{
+  currentUser : string;
   paths: SidebarItem[] = [
     {
       path: '/calendar',
@@ -34,4 +37,20 @@ export class NavbarComponent {
       icon: 'person'
     }
   ]
+
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
+  ngOnInit(): void {
+    this.authService.currentUser().then( user => this.currentUser = user.uid).catch( error => console.log(error));
+  }
+
+  get isAuth() {
+    return this.authService.isAuth();
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigateByUrl("/login")
+  }
 }
