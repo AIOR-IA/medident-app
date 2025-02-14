@@ -1,11 +1,11 @@
 @import '../../../assets/colors.scss';
 @import '../../../assets/table.scss';
 
-.users {
+.patients {
     @include container();
     .title{
         font-size: 32px;
-        margin-block: 70px;
+        margin-block: 50px;
     }
     .filters {
         @include filter();
@@ -16,6 +16,8 @@
           width: 12px;
           justify-self: start;
           border-radius: 15%;
+          text-align: center
+
         }
         .add-button {
           @include sky-blue-button();
@@ -23,7 +25,7 @@
           width: 100%;
         }
     }
-    .user-list {
+    .patient-list {
       @include table-view();
       .mat-elevation-z3 {
           width: 100%;
@@ -42,18 +44,14 @@
           .actionButton {
               @include action-button();
           }
-          .removeButton {
-              @include action-button($red);
-          }
-          .activeButton{
-            @include status-button($second-color);
-          }
-          .inactiveButton{
-            @include status-button($red);
-          }
+
       }
       .empty {
           font-size: 20px;
       }
   }
+}
+
+::ng-deep .mat-mdc-raised-button>.mat-icon {
+  margin: 0;
 }

@@ -1,1 +1,136 @@
-<p>edit-patient works!</p>
+<div class="dialog">
+  <h2 mat-dialog-title>Actualizar Paciente</h2>
+  <mat-dialog-content>
+    <form [formGroup]="patientForm" class="form">
+      <div class="form-field">
+        <label>Nombre:</label>
+        <input matInput type="text" formControlName="firstName" name="firstName" placeholder="Nombre (Juan)"
+          id="firstName" maxlength="50" required />
+        <mat-error *ngIf="
+            (patientForm.get('firstName')?.touched ||
+            patientForm.get('firstName')?.dirty) &&
+            patientForm.get('firstName')?.errors &&
+            patientForm.get('firstName')?.invalid
+          ">
+          <div *ngIf="patientForm.get('firstName')?.hasError('required')" class="error">
+            Campo nombre es requerido
+          </div>
+          <div *ngIf="patientForm.get('firstName')?.hasError('pattern')" class="error">
+            El campo nombre no debe contener números ni símbolos
+          </div>
+          <div *ngIf="patientForm.get('firstName')?.hasError('maxlength')" class="error">
+            Nombre debe tener 50 caracteres o menos
+          </div>
+          <div *ngIf="patientForm.get('firstName')?.hasError('minlength')" class="error">
+            Se requieren mínimo 3 caracteres
+          </div>
+        </mat-error>
+      </div>
+      <div class="form-field">
+        <label>Apellido:</label>
+        <input matInput type="text" formControlName="lastName" name="lastName" placeholder="Apellido (Perez)"
+          id="lastName" maxlength="50" required />
+        <mat-error *ngIf="
+            (patientForm.get('lastName')?.touched ||
+            patientForm.get('lastName')?.dirty) &&
+            patientForm.get('lastName')?.errors &&
+            patientForm.get('lastName')?.invalid
+          ">
+          <div *ngIf="patientForm.get('lastName')?.hasError('required')" class="error">
+            Campo apellido es requerido
+          </div>
+          <div *ngIf="patientForm.get('lastName')?.hasError('pattern')" class="error">
+            El campo apellido no debe contener números ni símbolos
+          </div>
+          <div *ngIf="patientForm.get('lastName')?.hasError('maxlength')" class="error">
+            Apellido debe tener 50 caracteres o menos
+          </div>
+          <div *ngIf="patientForm.get('lastName')?.hasError('minlength')" class="error">
+            Se requieren mínimo 3 caracteres
+          </div>
+        </mat-error>
+      </div>
+      <div class="form-field">
+        <label>Edad:</label>
+        <input matInput type="text" formControlName="age" name="age" placeholder="Edad (20)"
+          id="age" maxlength="50" required />
+        <mat-error *ngIf="
+            (patientForm.get('age')?.touched ||
+            patientForm.get('age')?.dirty) &&
+            patientForm.get('age')?.errors &&
+            patientForm.get('age')?.invalid
+          ">
+          <div *ngIf="patientForm.get('age')?.hasError('required')" class="error">
+            Campo edad es requerido.
+          </div>
+          <div *ngIf="patientForm.get('age')?.hasError('pattern')" class="error">
+            El campo edad solo puede tener 1 u 2 digitos con valores positivos
+          </div>
+        </mat-error>
+      </div>
+      <div class="form-field">
+        <label>Teléfono:</label>
+        <input matInput type="text" formControlName="phoneNumber" name="phoneNumber" placeholder="Teléfono (78787878)"
+          id="phoneNumber" maxlength="8" required />
+        <mat-error *ngIf="
+            (patientForm.get('phoneNumber')?.touched ||
+            patientForm.get('phoneNumber')?.dirty) &&
+            patientForm.get('phoneNumber')?.errors &&
+            patientForm.get('phoneNumber')?.invalid
+          ">
+          <div *ngIf="patientForm.get('phoneNumber')?.hasError('required')" class="error">
+            Campo teléfono es requerido
+          </div>
+          <div *ngIf="patientForm.get('phoneNumber')?.hasError('pattern')" class="error">
+            El campo teléfono no debe contener símbolos y tener 8 digitos
+          </div>
+        </mat-error>
+      </div>
+      <div class="form-field">
+        <label>Monto:</label>
+        <input matInput type="text" formControlName="amount" name="amount" placeholder="Monto (140)"
+          id="amount" maxlength="50" required />
+        <mat-error *ngIf="
+            (patientForm.get('amount')?.touched ||
+            patientForm.get('amount')?.dirty) &&
+            patientForm.get('amount')?.errors &&
+            patientForm.get('amount')?.invalid
+          ">
+          <div *ngIf="patientForm.get('amount')?.hasError('required')" class="error">
+            Campo monto es requerido
+          </div>
+          <div *ngIf="patientForm.get('amount')?.hasError('pattern')" class="error">
+            El campo monto es solo puede tener 1 a 4 digitos, con valores positivos o mayor o igual a 0
+          </div>
+        </mat-error>
+      </div>
+      <div class="form-field">
+        <label>Carnet de Identidad:</label>
+        <input matInput type="text" formControlName="ci" name="ci" placeholder="Ci (1244877)"
+          id="ci" maxlength="50" required />
+        <mat-error *ngIf="
+            (patientForm.get('ci')?.touched ||
+             patientForm.get('ci')?.dirty) &&
+             patientForm.get('ci')?.errors &&
+             patientForm.get('ci')?.invalid
+          ">
+          <div *ngIf="patientForm.get('ci')?.hasError('required')" class="error">
+            Campo carnet de identidad es requerido
+          </div>
+          <div *ngIf="patientForm.get('ci')?.hasError('maxlength')" class="error">
+            Carnet de identidad puede tener 15 caracteres maximo
+          </div>
+        </mat-error>
+      </div>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close class="cancel-button" (mousedown)="false">Cancelar</button>
+    <button mat-button class="success-button" type="submit" (click)="updatePatient()">
+        Actualizar
+    </button>
+  </mat-dialog-actions>
+  <button mat-icon-button class="close-button" [mat-dialog-close]="true" (mousedown)="false">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>

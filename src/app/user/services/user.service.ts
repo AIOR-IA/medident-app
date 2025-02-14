@@ -5,7 +5,6 @@ import { map, Observable, of, Subscription, switchMap } from 'rxjs';
 import { User } from '../interfaces/user.interface';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateUserModel } from '../interfaces/create-user.model';
-import { UserModel } from '../interfaces/user.model';
 import { QueryConstraint, orderBy as firebaseOrderBy, query, doc, Firestore, collection, collectionData, orderBy, addDoc, updateDoc, where } from '@angular/fire/firestore';
 @Injectable({
   providedIn: 'root'

@@ -26,7 +26,8 @@ const validationPatternEmail = "^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$";
 const validationPatternPassword = "^(?=.*[A-Z])[a-zA-ZñÑ0-9]{6,10}$";
 
 const ValidationPhone= "^[0-9]{8}$";
-
+const ValidationAge = "^[0-9]{1,2}$";
+const ValidationAmount = "^-?[0-9]{1,4}$";
 const TypeRole = [
   {display: 'Administrador', value: RoleType.ADMIN},
   {display: 'Usuario', value: RoleType.USER},
@@ -58,4 +59,6 @@ export {
   TypeRole,
   ColorsType,
   ValidationPhone,
+  ValidationAge,
+  ValidationAmount,
 };

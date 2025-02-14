@@ -1,13 +1,16 @@
+export type StatusPatient = 'canceled' | 'completed' | 'installment ';
 export interface Patient {
   //change UUID
-  id: string
   firstName: string;
   lastName: string;
   ci: string;
-  age: string;
-  createdAt: Date;
+  age: number;
+  createdAt?: Date;
   phoneNumber: string;
   amount: number;
-  isActive: boolean;
-  address: string;
+  status?: StatusPatient;
+  uid?: string
+  idDoc?: string;
+
 }
+
