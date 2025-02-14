@@ -55,3 +55,7 @@
 ::ng-deep .mat-mdc-raised-button>.mat-icon {
   margin: 0;
 }
+
+mat-row.mat-mdc-row {
+  border-bottom: 0.2px solid rgba($color: #202020, $alpha: 0.4);
+}

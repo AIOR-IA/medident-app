@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { CalendarRoutingModule } from './calendar-routing.module';
 import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
 import { FormsModule } from '@angular/forms';
-import { CalendarComponent } from './calendar.component';
+import { CreateEventComponent } from './create-event/create-event.component';
+import { CalendarComponent } from './layout/calendar.component';
 
 
 @NgModule({
   declarations: [
-    CalendarComponent
+    CalendarComponent,
+    CreateEventComponent
   ],
   imports: [
     CommonModule,

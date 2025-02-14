@@ -61,10 +61,10 @@ export class EditPatientComponent {
     },
     );
 
-    this.setCurrentUserValues();
+    this.setCurrentPatientValues();
   }
 
-  public setCurrentUserValues(): void {
+  public setCurrentPatientValues(): void {
     this.patientForm.patchValue({
       firstName: this.patient.firstName,
       lastName: this.patient.lastName,
@@ -82,15 +82,15 @@ export class EditPatientComponent {
     if (this.patientForm.valid) {
       this.trimValues();
       this.shortenBlankSpaces();
-      console.log('patient');
       const firstName = this.patientForm.get('firstName')!.value as string;
       const lastName = this.patientForm.get('lastName')!.value as string;
       const phoneNumber = this.patientForm.get('phoneNumber')!.value as string;
       const ci = this.patientForm.get('ci')!.value as string;
       const amount = this.patientForm.get('amount')!.value as number;
       const age = this.patientForm.get('age')!.value as number;
+      const idDoc = this.patient.idDoc;
 
-      this.patientService.createPatient({ firstName, lastName, phoneNumber, ci, amount, age })
+      this.patientService.updatePatient({ firstName, lastName, phoneNumber, ci, amount, age, idDoc })
         .then((data) => {
           this.reset();
           this.openSnakBar('Paciente actualizado', 'Aceptar');

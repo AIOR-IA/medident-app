@@ -1,0 +1,62 @@
+@import '../../../assets/colors.scss';
+@import '../../../assets/table.scss';
+
+.products {
+    @include container();
+    .title{
+        font-size: 32px;
+        margin-block: 50px;
+    }
+    .filters {
+        @include filter();
+        .filter-button {
+          @include success-button();
+          font-size: 5px;
+          margin-top: 5px;
+          width: 12px;
+          justify-self: start;
+          border-radius: 15%;
+          text-align: center
+
+        }
+        .add-button {
+          @include sky-blue-button();
+          margin-top: 5px;
+          width: 100%;
+        }
+    }
+    .product-list {
+      @include table-view();
+      // width: 80%;
+      .mat-elevation-z3 {
+          width: 100%;
+          mat-header-cell {
+              @include header-table();
+          }
+          mat-cell {
+              @include cell-distribution();
+          }
+          .order-button {
+              @include order-button();
+          }
+          .order-button-touched {
+              @include order-button-touched();
+          }
+          .actionButton {
+              @include action-button();
+          }
+
+      }
+      .empty {
+          font-size: 20px;
+      }
+  }
+}
+
+::ng-deep .mat-mdc-raised-button>.mat-icon {
+  margin: 0;
+}
+
+mat-row.mat-mdc-row {
+  border-bottom: 0.2px solid rgba($color: #202020, $alpha: 0.4);
+}

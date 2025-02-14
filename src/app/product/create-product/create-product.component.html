@@ -1,0 +1,56 @@
+<div class="dialog">
+  <h2 mat-dialog-title>Crear Producto</h2>
+  <mat-dialog-content>
+    <form [formGroup]="productForm" class="form">
+      <div class="form-field">
+        <label>Nombre:</label>
+        <input matInput type="text" formControlName="name" name="name" placeholder="Nombre (Producto quirurgica)"
+          id="name" maxlength="50" required />
+        <mat-error *ngIf="
+            (productForm.get('name')?.touched ||
+            productForm.get('name')?.dirty) &&
+            productForm.get('name')?.errors &&
+            productForm.get('name')?.invalid
+          ">
+          <div *ngIf="productForm.get('name')?.hasError('required')" class="error">
+            Campo nombre es requerido
+          </div>
+          <div *ngIf="productForm.get('name')?.hasError('maxlength')" class="error">
+            Nombre debe tener 50 caracteres o menos
+          </div>
+          <div *ngIf="productForm.get('name')?.hasError('minlength')" class="error">
+            Se requieren mínimo 2 caracteres
+          </div>
+        </mat-error>
+      </div>
+      <div class="form-field">
+        <label>Precio:</label>
+        <input matInput type="text" formControlName="price" name="price" placeholder="Precio (140)"
+          id="price" maxlength="60" required />
+        <mat-error *ngIf="
+            (productForm.get('price')?.touched ||
+            productForm.get('price')?.dirty) &&
+            productForm.get('price')?.errors &&
+            productForm.get('price')?.invalid
+          ">
+          <div *ngIf="productForm.get('price')?.hasError('required')" class="error">
+            Campo precio es requerido
+          </div>
+          <div *ngIf="productForm.get('price')?.hasError('pattern')" class="error">
+            El campo monto es solo puede tener 1 a 4 digitos, con valores positivos o mayor o igual a 0
+          </div>
+        </mat-error>
+      </div>
+
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close class="cancel-button" (mousedown)="false">Cancelar</button>
+    <button mat-button class="success-button" type="submit" (click)="saveProduct()">
+      Crear
+    </button>
+  </mat-dialog-actions>
+  <button mat-icon-button class="close-button" [mat-dialog-close]="true" (mousedown)="false">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>

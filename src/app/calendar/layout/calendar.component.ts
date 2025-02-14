@@ -1,8 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
-import { CalendarService } from './services/calendar.service';
-
-
-// import Swal from 'sweetalert2';
+import { CalendarService } from '../services/calendar.service';
 
 //full calendar imports
 import { FullCalendarComponent } from '@fullcalendar/angular';
@@ -12,7 +9,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import { CalendarOptions, DateSelectArg, EventClickArg, EventApi, DatesSetArg, CalendarApi } from '@fullcalendar/core';
 import esLocale from '@fullcalendar/core/locales/es';
-import { createEventId } from '../shared/utils/event.utils';
+import { createEventId } from '../../shared/utils/event.utils';
 
 
 interface User {
@@ -207,9 +204,9 @@ export class CalendarComponent implements OnInit, AfterViewInit{
   }
 
   handleEventClick(clickInfo: EventClickArg) {
-    if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-      clickInfo.event.remove();
-    }
+    // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
+    //   clickInfo.event.remove();
+    // }
   }
 
   handleEvents(events: EventApi[]) {

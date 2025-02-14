@@ -1,1 +1,44 @@
-<p>list-products works!</p>
+<div class="products">
+  <h2 class="title">Lista de Productos</h2>
+  <div class="filters">
+    <div class="form-field">
+      <label>Buscar por nombre </label>
+      <input matInput class="code" type="text" placeholder="Nombre ..." (keyup)="filterBy(txtInput.value)" #txtInput>
+    </div>
+    <button mat-raised-button type="button" class="filter-button" (click)="clearFilter()">
+      <mat-icon>
+        clear
+      </mat-icon>
+    </button>
+    <button mat-raised-button type="button" class="add-button" (click)="goToCreatePatient()">+ Nuevo Producto</button>
+  </div>
+  <div class="product-list">
+    <mat-table [dataSource]="products" class="mat-elevation-z3">
+      <ng-container matColumnDef="productName">
+        <mat-header-cell *matHeaderCellDef>Nombre
+        </mat-header-cell>
+        <mat-cell *matCellDef="let product">{{product.name}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="productPrice">
+        <mat-header-cell *matHeaderCellDef>Precio
+        </mat-header-cell>
+        <mat-cell *matCellDef="let product">{{product.price}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="productActions">
+        <mat-header-cell *matHeaderCellDef class="header">Acciones</mat-header-cell>
+        <mat-cell *matCellDef="let product">
+          <button mat-button (click)="goToEditPatient(product)" class="actionButton" title="Editar">
+            <mat-icon>
+              edit
+            </mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: tableColumns"></mat-row>
+    </mat-table>
+    <br>
+    <div *ngIf="products.data.length === 0" class="empty"> No se encontraron productos</div>
+  </div>
+  <mat-paginator [pageSizeOptions]="[10, 20, 50]" (page)="changeSize($event)"></mat-paginator>
+</div>

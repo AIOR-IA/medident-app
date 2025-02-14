@@ -1,5 +1,5 @@
 <div class='demo-app'>
-  <div class="demo-app-form">
+  <!-- <div class="demo-app-form">
     <h3>Agregar cita</h3>
     <label>Fecha:</label>
     <input type="date" [(ngModel)]="selectedDate">
@@ -10,7 +10,7 @@
     <button (click)="addEventFromForm()">Agregar</button>
     <button (click)="deleteEvents()">Delete Events</button>
 
-  </div>
+  </div> -->
   <div class='demo-app-main'>
     <full-calendar #calendar *ngIf='calendarVisible()' [options]='calendarOptions()'>
       <ng-template #eventContent let-arg>
