@@ -28,7 +28,7 @@ export class NavbarComponent implements OnInit{
     },
     {
       path: '/product',
-      title: 'Productos',
+      title: 'Servicios',
       icon: 'inventory_2'
     },
     {

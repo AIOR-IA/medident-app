@@ -1,0 +1,37 @@
+@import "../../../assets/form.scss";
+@import "../../../assets/colors.scss";
+
+.dialog {
+  @include dialog();
+  width: auto;
+
+  $width-button: 144px;
+  .sky-blue-button {
+    @include sky-blue-button;
+    width: $width-button !important;
+  }
+  .success-button {
+    @include success-button;
+    width: $width-button !important;
+  }
+  .cancel-button {
+    @include cancel-button;
+    width: $width-button !important;
+  }
+  .black-button {
+    @include black-button;
+    width: $width-button;
+  }
+  .delete-button {
+    @include delete-button;
+    width: $width-button;
+  }
+  .close-button {
+    top: 10px;
+    right: 10px
+  }
+  mat-dialog-actions {
+    justify-content: center;
+    gap: 10px;
+  }
+}

@@ -1,0 +1,50 @@
+<div class="filters">
+  <div class="form-field">
+    <label>Buscar Paciente </label>
+    <input matInput class="code" type="text" placeholder="Nombre ..." (keyup)="filterBy(txtInput.value)" #txtInput>
+  </div>
+  <button mat-raised-button type="button" class="filter-button" (click)="clearFilter()">
+    <mat-icon>
+      clear
+    </mat-icon>
+  </button>
+</div>
+<div class="patient-list">
+  <mat-table [dataSource]="patients" class="mat-elevation-z3">
+    <ng-container matColumnDef="patientFullName">
+      <mat-header-cell *matHeaderCellDef>Nombres
+      </mat-header-cell>
+      <mat-cell *matCellDef="let patient">{{patient.firstName}} {{patient.lastName}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="patientAge">
+      <mat-header-cell *matHeaderCellDef>Edad
+      </mat-header-cell>
+      <mat-cell *matCellDef="let patient">{{patient.age}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="patientPhoneNumber">
+      <mat-header-cell *matHeaderCellDef>Telefono
+      </mat-header-cell>
+      <mat-cell *matCellDef="let patient">{{patient.phoneNumber}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="patientCi">
+      <mat-header-cell *matHeaderCellDef>Carnet de Identidad
+      </mat-header-cell>
+      <mat-cell *matCellDef="let patient">{{patient.ci}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="patientActions">
+      <mat-header-cell *matHeaderCellDef class="header">Acciones</mat-header-cell>
+      <mat-cell *matCellDef="let patient">
+        <button mat-button  class="actionButton" title="Agregar paciente" (click)="addPatient(patient)">
+          <mat-icon>
+            person_add
+          </mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: tableColumns"></mat-row>
+  </mat-table>
+  <br>
+  <div *ngIf="patients.data.length === 0" class="empty"> No se encontraron pacientes</div>
+</div>
+<mat-paginator [pageSizeOptions]="[3]"></mat-paginator>

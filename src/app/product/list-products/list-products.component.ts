@@ -8,48 +8,48 @@ import { ProductService } from '../services/product.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { CreateProductComponent } from '../create-product/create-product.component';
 import { EditProductComponent } from '../edit-product/edit-product.component';
-
+import { DocumentData, QueryDocumentSnapshot } from '@firebase/firestore';
 @Component({
   selector: 'list-products',
   templateUrl: './list-products.component.html',
   styleUrls: ['./list-products.component.scss']
 })
 export class ListProductsComponent {
-private listObs$: Subscription = new Subscription();
+  private listObs$: Subscription = new Subscription();
   @ViewChild('txtInput') txtInput: ElementRef<HTMLInputElement>;
   public debouncer: Subject<string> = new Subject();
 
   tableColumns: string[] = ['productName', 'productPrice', 'productActions'];
   public products = new MatTableDataSource<Product>();
 
-
+  totalProducts: number = 0;
   public pageSize: number = 0;
-  public pageLength: number = 0;
+  lastDocs: QueryDocumentSnapshot<DocumentData>[] = [];
   public pageIndex: number = 0;
-  public size: any;
-
-  isLoading = false;
-  lastDocument: Product | null = null;
+  private searchName: string = '';
 
   private snakBar = inject(MatSnackBar);
   public dialog = inject(MatDialog);
   private productService = inject(ProductService);
 
-  constructor(
-  ) { }
+  constructor() { }
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngOnInit(): void {
     this.getProducts();
 
     this.debouncer
       .pipe(
-        debounceTime(800)
+        debounceTime(400)
       )
       .subscribe(search => {
-        this.getProducts(search);
+        this.pageIndex = 0;
+        this.searchName = search;
+        this.getProducts(this.searchName);
       })
+
+
     this.pageSize = 10;
   }
 
@@ -59,10 +59,41 @@ private listObs$: Subscription = new Subscription();
   }
 
   ngAfterViewInit(): void {
+    this.productService.totalProducts$.subscribe((total) => {
+      this.totalProducts = total;
+      setTimeout(() => {
+        this.products.paginator.length = this.totalProducts;
+      }, 200);
+    });
+    // Agregar una acción personalizada al botón Next
+    this.paginator.nextPage = () => {
+      if ((this.pageIndex + 1) * this.pageSize < this.totalProducts) {
+        this.pageIndex++;
+        this.getProducts(this.searchName);
+        setTimeout(() => {
+          this.products.paginator.length = this.totalProducts;
+          this.products.paginator.pageIndex = this.pageIndex;
+          this.paginator.pageIndex = this.pageIndex;
+        }, 400);
+      }
+    };
+
+    // Agregar una acción personalizada al botón Previous
+    this.paginator.previousPage = () => {
+      if (this.pageIndex > 0) {
+        this.pageIndex--;
+        this.getProducts(this.searchName);
+
+        setTimeout(() => {
+          this.products.paginator.length = this.totalProducts;
+          this.products.paginator.pageIndex = this.pageIndex;
+          this.paginator.pageIndex = this.pageIndex;
+        }, 400);
+      }
+    };
+
     this.products.paginator = this.paginator;
   }
-
-
 
   /**
    * Method to get all the patients
@@ -71,13 +102,28 @@ private listObs$: Subscription = new Subscription();
     this.listObs$.unsubscribe();
     this.listObs$ = new Subscription()
 
-    this.size = this.pageSize;
-    this.pageSize = 0;
-    const patientsObs$ = this.productService.getAllProductsObs(name).subscribe(patients => {
-      this.products.data = patients;
-      this.pageLength = patients.length;
+    this.pageSize = 10;
+    const patientsObs$ = this.productService.getAllProductsObs(this.pageIndex, this.pageSize, this.lastDocs[this.pageIndex - 1] || undefined, name).subscribe(result => {
+      this.products.data = result.products;
+      this.lastDocs[this.pageIndex] = result.lastDoc!; // Store last document
+      setTimeout(() => {
+        if (name !== '') {
+          this.productService.countProductsByPrefix(name)
+            .then((total) => {
+              this.products.paginator.length = total;
+              this.paginator.length = total;
+            })
+            .catch((error) => {
+              this.openSnakBar('Error, no se pudo obtener el total de servicios', 'Aceptar');
+            });
+        } else {
+          this.products.paginator.length = this.totalProducts;
+          this.paginator.length = this.totalProducts;
+        }
+        this.paginator.pageIndex = this.pageIndex;
+      }, 400);
+      // this.pageLength = patients.length;
     });
-    this.pageSize = this.size;
     this.listObs$.add(patientsObs$);
   }
 
@@ -87,18 +133,19 @@ private listObs$: Subscription = new Subscription();
   public goToCreatePatient() {
     const dialogCreateRef = this.dialog.open(CreateProductComponent);
     dialogCreateRef.afterClosed().subscribe(result => {
-      result && this.getProducts();
+      if (result) {
+        this.updatePaginator();
+      }
     });
-
   }
 
-  /**
-   * Method to change the page size of the patient paginator.
-   * @param pageEvent The PageEvent containing the new page size and length of the paginator.
-   */
-  public changeSize(pageEvent: PageEvent) {
-    // this.pageSize = pageEvent.pageSize;
-    // this.users.paginator.length = pageEvent.length;
+  updatePaginator() {
+    this.pageIndex = 0;
+    this.pageSize = 10;
+    this.lastDocs = [];
+    this.searchName = '';
+    this.products.paginator.length = this.totalProducts;
+    this.getProducts();
   }
 
   /**
@@ -124,7 +171,6 @@ private listObs$: Subscription = new Subscription();
   }
 
 
-
   /**
    * Method to open the page edit patient
    * @param patient Patient is the object that We must send to the page edit patient
@@ -134,7 +180,9 @@ private listObs$: Subscription = new Subscription();
       data: patient
     });
     dialogEditRef.afterClosed().subscribe(result => {
-      result && this.getProducts();
+      if (result) {
+        this.updatePaginator();
+      }
     });
   };
 
@@ -146,7 +194,10 @@ private listObs$: Subscription = new Subscription();
   clearFilter() {
     if (this.txtInput.nativeElement.value.length > 0) {
       this.txtInput.nativeElement.value = '';
-      this.getProducts();
+      this.searchName = '';
+      this.updatePaginator();
     }
   }
+
+
 }

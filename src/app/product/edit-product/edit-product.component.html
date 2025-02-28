@@ -1,10 +1,10 @@
 <div class="dialog">
-  <h2 mat-dialog-title>Actualizar Producto</h2>
+  <h2 mat-dialog-title>Actualizar Servicio</h2>
   <mat-dialog-content>
     <form [formGroup]="productForm" class="form">
       <div class="form-field">
         <label>Nombre:</label>
-        <input matInput type="text" formControlName="name" name="name" placeholder="Nombre (Producto quirurgica)"
+        <input matInput type="text" formControlName="name" name="name" placeholder="Nombre (Servicio quirurgica)"
           id="name" maxlength="50" required />
         <mat-error *ngIf="
             (productForm.get('name')?.touched ||

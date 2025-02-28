@@ -1,11 +1,11 @@
 <div class="dialog">
-  <h2 mat-dialog-title>Crear Producto</h2>
+  <h2 mat-dialog-title>Crear Servicio</h2>
   <mat-dialog-content>
     <form [formGroup]="productForm" class="form">
       <div class="form-field">
         <label>Nombre:</label>
-        <input matInput type="text" formControlName="name" name="name" placeholder="Nombre (Producto quirurgica)"
-          id="name" maxlength="50" required />
+        <input matInput type="text" formControlName="name" name="name" placeholder="Nombre (Servicio quirurgica)"
+          id="name" maxlength="100" required />
         <mat-error *ngIf="
             (productForm.get('name')?.touched ||
             productForm.get('name')?.dirty) &&
@@ -16,7 +16,7 @@
             Campo nombre es requerido
           </div>
           <div *ngIf="productForm.get('name')?.hasError('maxlength')" class="error">
-            Nombre debe tener 50 caracteres o menos
+            Nombre debe tener 100 caracteres o menos
           </div>
           <div *ngIf="productForm.get('name')?.hasError('minlength')" class="error">
             Se requieren mínimo 2 caracteres

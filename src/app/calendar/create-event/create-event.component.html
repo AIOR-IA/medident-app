@@ -1,1 +1,114 @@
-<p>create-event works!</p>
+<div class="patients">
+  <button mat-icon-button class="close-button" [mat-dialog-close]="true" (mousedown)="false">
+    <mat-icon>close</mat-icon>
+  </button>
+  <h2 class="title">Crear Evento</h2>
+  <list-calendar-user (selectedUser)="onUserAdded($event)"></list-calendar-user>
+  <list-calendar-patient (selectedPatient)="onPatientAdded($event)"></list-calendar-patient>
+
+  <div class="product-list">
+    <mat-table [dataSource]="treatments" class="mat-elevation-z3">
+      <ng-container matColumnDef="treatmentCreatedAt">
+        <mat-header-cell *matHeaderCellDef>Creado en:
+        </mat-header-cell>
+        <mat-cell *matCellDef="let treatment">{{ formatDate(treatment.createdAt) }}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="treatmentBudget">
+        <mat-header-cell *matHeaderCellDef>Presupuesto
+        </mat-header-cell>
+        <mat-cell *matCellDef="let treatment">{{treatment.budget}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="productActions">
+        <mat-header-cell *matHeaderCellDef class="header">Acciones</mat-header-cell>
+        <mat-cell *matCellDef="let treatment">
+          <button mat-button class="actionButton" title="Ver servicios" (click)="showServices(treatment)">
+            <mat-icon>
+              description
+            </mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: tableColumns"></mat-row>
+    </mat-table>
+    <br>
+    <div *ngIf="treatments.data.length === 0" class="empty"> No se encontraron tratamientos</div>
+  </div>
+  <mat-paginator [pageSizeOptions]="[3]"></mat-paginator>
+  <div *ngIf="this.dataSource.data.length > 0" class="treatment-list">
+    <br>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z3">
+      <!-- Index Column -->
+      <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef> # </th>
+        <td mat-cell *matCellDef="let product">
+          {{ dataSource.data.indexOf(product) + 1 }}
+        </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Nombre </th>
+        <td mat-cell *matCellDef="let product"> {{product.name}} </td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef> Precio </th>
+        <td mat-cell *matCellDef="let product"> {{product.price}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="quantity">
+        <th mat-header-cell *matHeaderCellDef> Cantidad </th>
+        <td mat-cell *matCellDef="let product"> {{product.quantity}} </td>
+      </ng-container>
+      <ng-container matColumnDef="total">
+        <th mat-header-cell *matHeaderCellDef> Realizados </th>
+        <td mat-cell *matCellDef="let product"> {{(product.done)}} </td>
+      </ng-container>
+      <ng-container matColumnDef="toDo">
+        <th mat-header-cell *matHeaderCellDef> Realizar </th>
+        <td mat-cell *matCellDef="let product"> <input matInput class="toDo" type="number" min="1"
+            [(ngModel)]="product.toDo" /> </td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+        <td mat-cell *matCellDef="let product">
+          <button mat-button class="actionButton" title="Agregar Servicio" (click)="addTreatmentToDo(product)">
+            <mat-icon>
+              add_box
+            </mat-icon>
+          </button>
+          <button mat-button class="actionButton" title="Quitar Servicio" (click)="deleteServicio(product)">
+            <mat-icon>
+              delete
+            </mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+  </div>
+  <br>
+  <p> <b>DOCTOR:</b> {{ selectedUser?.firstName | uppercase }} {{ selectedUser?.lastName | uppercase}} con ci: {{
+    selectedUser?.ci}}</p>
+  <p> <b>PACIENTE:</b> {{selectedPatient?.firstName | uppercase}} {{ selectedPatient?.lastName | uppercase}} ci:
+    {{selectedPatient?.ci}} <br>
+  </p>
+  <p *ngFor="let item of selectedTreatmentProduct"> realizar: <b>{{item?.name | uppercase}}</b> precio: {{item?.price}}
+    realizar: {{
+    item?.toDo}} </p>
+  <p> <b>Hora Inicio:</b> {{ formatDate(time.start) }} <b>Hora Fin:</b> {{formatDate(time.end)}}</p>
+
+
+  <mat-dialog-actions class="buttons">
+    <button mat-button mat-dialog-close class="cancel-button" (mousedown)="false">Cancelar</button>
+    <button mat-button class="success-button" type="submit" (click)="createEvent()">
+      Crear
+    </button>
+  </mat-dialog-actions>
+</div>

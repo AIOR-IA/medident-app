@@ -1,15 +1,22 @@
 import { AfterViewInit, ChangeDetectorRef, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { CalendarService } from '../services/calendar.service';
-
+import { Timestamp } from '@angular/fire/firestore';
 //full calendar imports
 import { FullCalendarComponent } from '@fullcalendar/angular';
-import interactionPlugin from '@fullcalendar/interaction';
+import interactionPlugin, { EventResizeDoneArg } from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import { CalendarOptions, DateSelectArg, EventClickArg, EventApi, DatesSetArg, CalendarApi } from '@fullcalendar/core';
 import esLocale from '@fullcalendar/core/locales/es';
 import { createEventId } from '../../shared/utils/event.utils';
+import { Event } from '../interfaces/event.interface';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ClassButtonType } from 'src/app/shared/enums/class.button.type.enum';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmCalendarDialogComponent } from 'src/app/core/confirm-calendar-dialog/confirm-calendar-dialog.component';
+import { CreateEventComponent } from '../create-event/create-event.component';
+import { ConfirmDialogComponent } from 'src/app/core/confirm-dialog/confirm-dialog.component';
 
 
 interface User {
@@ -25,13 +32,19 @@ interface User {
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss']
 })
-export class CalendarComponent implements OnInit, AfterViewInit{
+export class CalendarComponent implements OnInit, AfterViewInit {
   isMobile = false;
+  private snakBar = inject(MatSnackBar);
+  public dialog = inject(MatDialog);
+
+  currentStartDate = new Date();
+  currentEndDate = new Date();
+
   selectedDate = '';
   selectedStartTime = '';
   selectedEndTime = '';
   public calendarService = inject(CalendarService);
-
+  public events: Event[] = []
   public users: User[] = [
     {
       id: 1,
@@ -108,12 +121,13 @@ export class CalendarComponent implements OnInit, AfterViewInit{
     selectable: true,
     selectMirror: true,
     dayMaxEvents: true,
-    select: this.handleDateSelect.bind(this),
+    select: this.handleDateSelect.bind(this), // ti new events
     eventClick: this.handleEventClick.bind(this),
     eventsSet: this.handleEvents.bind(this),
     datesSet: this.onDatesSet.bind(this),
     eventMouseEnter: this.handleEventMouseEnter.bind(this),
     eventMouseLeave: this.handleEventMouseLeave.bind(this),
+    eventResize: this.onEventResize.bind(this),
     /* you can update a remote database when these fire:
     eventAdd:
     eventChange:
@@ -131,16 +145,6 @@ export class CalendarComponent implements OnInit, AfterViewInit{
   }
 
   ngOnInit(): void {
-    this.loadEvents();
-  }
-
-  private loadEvents(): void {
-    this.calendarService.getEvents().subscribe(events => {
-      this.calendarOptions.update(options => ({
-        ...options,
-        events: events // Mutar la señal correctamente
-      }));
-    });
   }
 
 
@@ -157,61 +161,199 @@ export class CalendarComponent implements OnInit, AfterViewInit{
   }
 
   handleDateSelect(selectInfo: DateSelectArg) {
-    const title = prompt('Please enter a new title for your event');
-    this.calendarApi = selectInfo.view.calendar;
 
-    this.calendarApi.unselect(); // Limpiar selección previa
 
-    if (title) {
-      // Buscar el usuario por nombre
-      const user = this.users.find(user => user.name.toLowerCase() === title.toLowerCase());
-
-      // Asignar un color por defecto si no encuentra el usuario
-      const eventColor = user ? user.color : '#3787878'; // Azul por defecto
-
-      let start = selectInfo.startStr;
-      let end = selectInfo.endStr;
-      let allDay = selectInfo.allDay;
-      if (allDay) {
-        // Si se seleccionó en vista de mes, establecer un horario por defecto
-        start = `${selectInfo.startStr}T08:00:00`; // 8 AM
-        end = `${selectInfo.startStr}T18:00:00`; // 6 PM
-        allDay = false; // Convertir en evento con horario específico
-      }
-      // Agregar evento al calendario con color personalizado
-      this.calendarApi.addEvent({
-        id: createEventId(),
-        title,
-        start,
-        end,
-        allDay,
-        backgroundColor: eventColor, // 👈 Color de fondo del evento
-        borderColor: eventColor // 👈 Opcional: Color del borde
+    const dateNow = selectInfo.start;
+    if (new Date() > dateNow) {
+      this.openSnakBar('Error no puede crear un evento previo a la hora y fecha actual', 'Aceptar');
+      this.calendarApi.unselect();
+    } else {
+      const startEvent = selectInfo.start.toLocaleTimeString('es-BO', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true // Activa el formato AM/PM
       });
 
-      // Mostrar alerta de éxito
-      // Swal.fire({
-      //   title: "Evento agregado!",
-      //   text: `Evento de ${title} añadido correctamente.`,
-      //   icon: "success"
-      // });
+      const endEvent = selectInfo.end.toLocaleTimeString('es-BO', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
+
+      const date = selectInfo.start.toLocaleDateString('es-BO', { day: 'numeric', month: 'long' });
+      const year = selectInfo.start.getFullYear();
+
+      const message = `Hora: ${startEvent} &nbsp;${endEvent} <br>Fecha: ${date} ${year}`;
+      const confirm = `Crear`;
+
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        width: '450px',
+        data: {
+          title: 'Crear nuevo evento',
+          description: message,
+          btnCancel: { text: 'Cancelar', class: ClassButtonType.Black },
+          btnConfirm: { text: confirm, class: ClassButtonType.Blue },
+        },
+      });
+
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          const time = {
+            start: selectInfo.start,
+            end: selectInfo.end,
+          }
+          const dialogEditRef = this.dialog.open(CreateEventComponent, {
+            data: time,
+          });
+          dialogEditRef.afterClosed().subscribe(result => {
+            this.getAllEvents(this.currentStartDate, this.currentEndDate);
+
+          });
+        }
+      });
     }
+
   }
 
+  /**
+   * use to load All events
+   * @param dateInfo
+   */
   private onDatesSet(dateInfo: DatesSetArg): void {
     console.log('Fecha visible:', dateInfo.start, '->', dateInfo.end);
+    this.currentEndDate = dateInfo.end;
+    this.currentStartDate = dateInfo.start;
+    this.getAllEvents(dateInfo.start, dateInfo.end);
     // this.loadEvents(dateInfo.start, dateInfo.end); // Cargar eventos para el nuevo rango
   }
 
-  handleEventClick(clickInfo: EventClickArg) {
-    // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-    //   clickInfo.event.remove();
-    // }
+  getAllEvents(start: Date, end: Date) {
+    this.calendarService.getAllEvents(start, end)
+      .then(listEvent => {
+        console.log(listEvent);
+        const events = listEvent.map(event => ({
+          id: event.idDoc,
+          title: event.title,
+          start: event.start.toDate(),
+          end: event.end.toDate(),
+          backgroundColor: event.backgroundColor
+        }));
+
+        this.calendarOptions.update(options => ({
+          ...options,
+          events: [] // Limpia todos los eventos previos
+        }));
+
+        this.calendarOptions.update(options => ({
+          ...options,
+          events: events // Mutar la señal correctamente
+        }));
+      })
+      .catch(error => {
+        console.error('Error al obtener eventos:', error);
+      });
+  }
+
+  handleEventClick(info: EventClickArg) {
+    if (this.isValidDate(info.event.start)) {
+      this.openSnakBar('Erro, no puede modificar un evento pasado a la hora y fecha actual', 'Aceptar');
+      //   this.calendarApi.unselect();
+    } else {
+      console.log('Evento existente seleccionado:', info.event);
+      console.log('Título:', info.event.title);
+      console.log('Fecha inicio:', info.event.start);
+      console.log('Fecha fin:', info.event.end);
+      console.log('id:', info.event.id);
+      const time = {
+        start: info.event.start,
+        end: info.event.end,
+        id: '23'
+      }
+      const confirm = 'Actualizar';
+      const deleteEvent = 'Eliminar'
+
+
+      const dialogRef = this.dialog.open(ConfirmCalendarDialogComponent, {
+        width: '420px',
+        data: {
+          title: 'Opciones en evento existente',
+          btnCancel: { text: 'Cancelar', class: ClassButtonType.Black },
+          btnConfirm: { text: confirm, class: ClassButtonType.Blue },
+          btnEdit: { text: deleteEvent, class: ClassButtonType.Delete },
+        },
+      });
+
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result === 'delete') {
+          this.calendarService.getEventById(info.event.id).then( result => {
+            this.calendarService.deleteTreatmentProducts(result.idDocPatient, result.idDocRecords, result.products, info.event.id)
+              .then(() => {
+                this.getAllEvents(this.currentStartDate, this.currentEndDate);
+                this.openSnakBar('Evento eliminado', 'Aceptar');
+              })
+              .catch(error => {
+                this.openSnakBar('Error al eliminar el evento', 'Aceptar');
+              })
+          })
+          .catch(error => {
+            this.openSnakBar('Error al obtener el evento', 'Aceptar');
+          })
+        }
+        if (result === 'update') {
+          console.log('ENVIAMOS UPDATE');
+          const dialogEditRef = this.dialog.open(CreateEventComponent, {
+            data: time,
+          });
+          dialogEditRef.afterClosed().subscribe(result => {
+            console.log(result);
+          });
+        }
+      });
+      // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
+      //   clickInfo.event.remove();
+      // }
+    }
+
+  }
+
+  // Método para capturar el resize del evento
+  private onEventResize(info: EventResizeDoneArg) {
+    console.log('Evento redimensionado:', info.event);
+    console.log('Nueva fecha de inicio:', info.event.start);
+    console.log('Nueva fecha de fin:', info.event.end);
+
+    // Aquí puedes actualizar la base de datos con el nuevo horario
   }
 
   handleEvents(events: EventApi[]) {
+    console.log('handle events');
     this.currentEvents.set(events);
     this.changeDetector.detectChanges(); // workaround for pressionChangedAfterItHasBeenCheckedError
+  }
+
+
+
+  /**
+    * Method for showing a custom message.
+    * @param message The message to display in the snack bar.
+    * @param action The label for the action button in the snack bar.
+    */
+  openSnakBar(message: string, action: string): void {
+    this.snakBar.open(message, action, { duration: 3000 });
+  }
+
+  isValidDate(selectedDate: Date) {
+    return new Date() > selectedDate;
+  }
+
+
+  //! ALL THIS IS TO CREATE AN EVENT FROM A FORM
+  addEventFromForm() {
+    if (this.selectedDate && this.selectedStartTime && this.selectedEndTime) {
+      const startDateTime = `${this.selectedDate}T${this.selectedStartTime}:00`;
+      const endDateTime = `${this.selectedDate}T${this.selectedEndTime}:00`;
+      this.addEvent('Nueva Cita', startDateTime, endDateTime);
+    }
   }
 
   addEvent(title: string, start: string, end: string) {
@@ -241,14 +383,6 @@ export class CalendarComponent implements OnInit, AfterViewInit{
     //   icon: "success"
     // });
   }
-  addEventFromForm() {
-    if (this.selectedDate && this.selectedStartTime && this.selectedEndTime) {
-      const startDateTime = `${this.selectedDate}T${this.selectedStartTime}:00`;
-      const endDateTime = `${this.selectedDate}T${this.selectedEndTime}:00`;
-      this.addEvent('Nueva Cita', startDateTime, endDateTime);
-    }
-  }
-
   deleteEvents() {
     this.calendarApi.removeAllEvents();
     this.calendarApi.removeAllEventSources();
@@ -265,10 +399,13 @@ export class CalendarComponent implements OnInit, AfterViewInit{
     tooltip.style.color = 'white';
     tooltip.style.padding = '5px 10px';
     tooltip.style.borderRadius = '5px';
-    tooltip.style.whiteSpace = 'nowrap';
-    tooltip.style.fontSize = '12px';
+    tooltip.style.whiteSpace = 'normal'; // Permitir saltos de línea
+    tooltip.style.wordWrap = 'break-word'; // Romper palabras largas si es necesario
+    tooltip.style.fontSize = '14px';
     tooltip.style.zIndex = '1000';
     tooltip.style.pointerEvents = 'none';
+    tooltip.style.maxWidth = '250px'; // Limitar el ancho máximo para evitar desbordamiento
+    tooltip.style.boxShadow = '0px 0px 5px rgba(0, 0, 0, 0.5)';
 
     // Posicionar el tooltip al lado del cursor
     document.body.appendChild(tooltip);

@@ -1,0 +1,47 @@
+@import '../../../assets/colors.scss';
+@import '../../../assets/table.scss';
+
+.filters {
+  @include filter();
+  .filter-button {
+    @include success-button();
+    font-size: 5px;
+    margin-top: 5px;
+    width: 12px;
+    justify-self: start;
+    border-radius: 15%;
+    text-align: center
+
+  }
+  .add-button {
+    @include sky-blue-button();
+    margin-top: 5px;
+    width: 100%;
+  }
+}
+.product-list {
+@include table-view();
+margin-top: 0;
+.mat-elevation-z3 {
+    width: 100%;
+    mat-header-cell {
+        @include header-table();
+    }
+    mat-cell {
+        @include cell-distribution();
+    }
+    .order-button {
+        @include order-button();
+    }
+    .order-button-touched {
+        @include order-button-touched();
+    }
+    .actionButton {
+        @include action-button();
+    }
+
+}
+.empty {
+    font-size: 20px;
+}
+}

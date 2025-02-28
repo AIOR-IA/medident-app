@@ -112,7 +112,6 @@ export class CreateUserComponent implements OnInit{
       const password = this.userForm.get('password')!.value as string;
       this.userService.createUser({ firstName, lastName, phoneNumber, email, ci, address, role, color, password })
         .then((data) => {
-          console.log({ data });
           this.reset();
           this.openSnakBar('Usuario creado', 'Aceptar');
           // this.dialogRef.close(data);

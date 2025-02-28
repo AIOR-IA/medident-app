@@ -27,6 +27,7 @@
     }
     .patient-list {
       @include table-view();
+      width: 100%;
       .mat-elevation-z3 {
           width: 100%;
           mat-header-cell {

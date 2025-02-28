@@ -31,7 +31,7 @@ export class CreateProductComponent {
       name: ['', [
         Validators.required,
         Validators.minLength(2),
-        Validators.maxLength(60),
+        Validators.maxLength(100),
       ]],
       price: [0, [
         Validators.required,
@@ -54,11 +54,11 @@ export class CreateProductComponent {
       this.productService.createProduct({ name, price})
         .then((data) => {
           this.reset();
-          this.openSnakBar('Producto creado', 'Aceptar');
+          this.openSnakBar('Servicio creado', 'Aceptar');
           this.dialogRef.close(data);
         })
         .catch((error) => {
-          this.openSnakBar('Error, no se pudo crear el producto', 'Aceptar');
+          this.openSnakBar('Error, no se pudo crear el servicio', 'Aceptar');
         });
     }
     else {

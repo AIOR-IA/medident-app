@@ -34,11 +34,6 @@
         </mat-header-cell>
         <mat-cell *matCellDef="let patient">{{patient.ci}}</mat-cell>
       </ng-container>
-      <ng-container matColumnDef="patientAmount">
-        <mat-header-cell *matHeaderCellDef>Monto
-        </mat-header-cell>
-        <mat-cell *matCellDef="let patient">{{patient.amount}}</mat-cell>
-      </ng-container>
       <ng-container matColumnDef="patientStatus">
         <mat-header-cell *matHeaderCellDef>Estado
         </mat-header-cell>
@@ -50,6 +45,16 @@
           <button mat-button (click)="goToEditPatient(patient)" class="actionButton" title="Editar">
             <mat-icon>
               edit
+            </mat-icon>
+          </button>
+          <button mat-button (click)="goToCreateBudget(patient)" class="actionButton" title="Crear presupuesto">
+            <mat-icon>
+              add
+            </mat-icon>
+          </button>
+          <button mat-button (click)="goToListTreatments(patient)" class="actionButton" title="Ver tratamientos">
+            <mat-icon>
+              visibility
             </mat-icon>
           </button>
         </mat-cell>

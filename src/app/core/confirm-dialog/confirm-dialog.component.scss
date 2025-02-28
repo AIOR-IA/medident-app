@@ -7,7 +7,7 @@
   $width-button: 144px;
   .sky-blue-button {
     @include sky-blue-button;
-    width: $width-button;
+    width: $width-button !important;
   }
   .success-button {
     @include success-button;

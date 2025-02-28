@@ -1,0 +1,140 @@
+@import '../../../assets/colors.scss';
+@import '../../../assets/table.scss';
+@import '../../../assets/form.scss';
+.patients {
+    @include container();
+
+    // margin-inline: 5%;
+    height: 90vh;
+    max-width: 85vw !important;
+    margin-left: 15px !important;
+    margin-right: 15px !important;
+    // overflow-y: scroll;
+    .title{
+        font-size: 32px;
+        margin-block: 50px;
+    }
+
+  .close-button {
+    top: 10px;
+    right: 10px;
+    position: absolute;
+  }
+  .filters {
+    @include filter();
+    .filter-button {
+      @include success-button();
+      font-size: 5px;
+      margin-top: 5px;
+      width: 12px;
+      justify-self: start;
+      border-radius: 15%;
+      text-align: center
+
+    }
+    .add-button {
+      @include sky-blue-button();
+      margin-top: 5px;
+      width: 100%;
+    }
+  }
+  .product-list {
+    @include table-view();
+    margin-top: 0;
+    .mat-elevation-z3 {
+        width: 100%;
+        mat-header-cell {
+            @include header-table();
+        }
+        mat-cell {
+            @include cell-distribution();
+        }
+        .order-button {
+            @include order-button();
+        }
+        .order-button-touched {
+            @include order-button-touched();
+        }
+        .actionButton {
+            @include action-button();
+        }
+
+    }
+    .empty {
+        font-size: 20px;
+    }
+  }
+  .treatment-list{
+    @include table-view();
+    width: 100%;
+    margin-top: 0;
+    .mat-elevation-z3 {
+        width: 100%;
+        mat-header-cell {
+            @include header-table();
+        }
+        mat-cell {
+            @include cell-distribution();
+        }
+        .order-button {
+            @include order-button();
+        }
+        .order-button-touched {
+            @include order-button-touched();
+        }
+        .actionButton {
+            @include action-button();
+        }
+        .toDo{
+          width: 100px;
+        }
+    }
+    .empty {
+        font-size: 20px;
+    }
+  }
+  $width-button: 230px;
+    mat-dialog-actions{
+        display: flex;
+        height: 100px;
+        justify-content: space-around;
+        .cancel-button{
+            @include cancel-button();
+            width: $width-button;
+        }
+        .success-button {
+            @include success-button();
+            width: $width-button;
+        }
+        .sky-blue-button {
+            @include sky-blue-button();
+            width: $width-button;
+        }
+        .disabled-button {
+          @include disabled-button();
+          width: $width-button;
+        }
+    }
+    margin-bottom: 1rem;
+
+}
+
+::ng-deep .mat-mdc-raised-button>.mat-icon {
+  margin: 0;
+}
+
+mat-row.mat-mdc-row {
+  border-bottom: 0.2px solid rgba($color: #202020, $alpha: 0.4);
+}
+
+// ::ng-deep #cdk-overlay-1 {
+//   height: 90% !important;
+//   width: 90vw;
+// }
+::ng-deep .mat-mdc-dialog-container {
+  // width: 90vw !important;
+
+  display: flex;
+  min-height: calc(100% - 15px);
+  max-height: calc(100% - 15px);
+}

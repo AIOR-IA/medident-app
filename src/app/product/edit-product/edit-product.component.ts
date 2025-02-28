@@ -65,11 +65,11 @@ export class EditProductComponent {
       this.productService.updateProduct({ name, price, idDoc })
         .then((data) => {
           this.reset();
-          this.openSnakBar('Producto actualizado', 'Aceptar');
+          this.openSnakBar('Servicio actualizado', 'Aceptar');
           this.dialogRef.close(data);
         })
         .catch((error) => {
-          this.openSnakBar('Error, no se pudo actualizar el producto', 'Aceptar');
+          this.openSnakBar('Error, no se pudo actualizar el servicio', 'Aceptar');
         });
     }
     else {

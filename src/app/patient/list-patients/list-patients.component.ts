@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Patient } from '../interfaces/patient.interface';
@@ -8,19 +8,21 @@ import { PatientService } from '../services/patient.service';
 import { debounceTime, Subject, Subscription } from 'rxjs';
 import { CreatePatientComponent } from '../create-patient/create-patient.component';
 import { EditPatientComponent } from '../edit-patient/edit-patient.component';
+import { CreateBudgetComponent } from '../create-budget/create-budget.component';
+import { ListTreatmentsComponent } from '../list-treatments/list-treatments.component';
 
 @Component({
   selector: 'list-patients',
   templateUrl: './list-patients.component.html',
   styleUrls: ['./list-patients.component.scss']
 })
-export class ListPatientsComponent {
+export class ListPatientsComponent implements AfterViewInit {
 
   private listObs$: Subscription = new Subscription();
   @ViewChild('txtInput') txtInput: ElementRef<HTMLInputElement>;
   public debouncer: Subject<string> = new Subject();
 
-  tableColumns: string[] = ['patientFullName', 'patientAge', 'patientPhoneNumber', 'patientCi', 'patientAmount', 'patientStatus', 'patientActions'];
+  tableColumns: string[] = ['patientFullName', 'patientAge', 'patientPhoneNumber', 'patientCi', 'patientStatus', 'patientActions'];
   public patients = new MatTableDataSource<Patient>();
 
 
@@ -138,6 +140,26 @@ export class ListPatientsComponent {
       result && this.getPatients();
     });
   };
+
+
+  /**
+   * Method to open the page edit patient
+   * @param patient Patient is the object that We must send to the page edit patient
+   */
+  public goToCreateBudget(patient) {
+    const dialogEditRef = this.dialog.open(CreateBudgetComponent, {
+      data: patient
+    });
+    dialogEditRef.afterClosed().subscribe(result => {
+      result && this.getPatients();
+    });
+  };
+
+  public goToListTreatments(patient: Patient) {
+    this.dialog.open(ListTreatmentsComponent, {
+      data: patient
+    });
+  }
 
   filterBy(search: string) {
     const name = search.trim().toLowerCase();

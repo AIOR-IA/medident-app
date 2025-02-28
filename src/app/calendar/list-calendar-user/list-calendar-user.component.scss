@@ -1,0 +1,55 @@
+@import '../../../assets/colors.scss';
+@import '../../../assets/table.scss';
+
+.filters {
+  @include filter();
+  width: 800px;
+  .filter-button {
+    @include success-button();
+    font-size: 5px;
+    margin-top: 5px;
+    width: 12px;
+    justify-self: start;
+    border-radius: 15%;
+    text-align: center
+  }
+  .add-button {
+    @include sky-blue-button();
+    margin-top: 5px;
+    width: 100%;
+  }
+}
+.user-list {
+@include table-view();
+margin-top: 0;
+.mat-elevation-z3 {
+    width: 100%;
+    mat-header-cell {
+        @include header-table();
+    }
+    mat-cell {
+        @include cell-distribution();
+    }
+    .order-button {
+        @include order-button();
+    }
+    .order-button-touched {
+        @include order-button-touched();
+    }
+    .actionButton {
+        @include action-button();
+    }
+    .removeButton {
+        @include action-button($red);
+    }
+    .activeButton{
+      @include status-button($color-status);
+    }
+    .inactiveButton{
+      @include status-button($red);
+    }
+}
+.empty {
+    font-size: 20px;
+}
+}

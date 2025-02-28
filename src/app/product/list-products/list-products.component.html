@@ -1,5 +1,6 @@
 <div class="products">
-  <h2 class="title">Lista de Productos</h2>
+  <h2 class="title">Lista de Servicios</h2>
+  <p>total Products: {{totalProducts}}</p>
   <div class="filters">
     <div class="form-field">
       <label>Buscar por nombre </label>
@@ -10,7 +11,7 @@
         clear
       </mat-icon>
     </button>
-    <button mat-raised-button type="button" class="add-button" (click)="goToCreatePatient()">+ Nuevo Producto</button>
+    <button mat-raised-button type="button" class="add-button" (click)="goToCreatePatient()">+ Nuevo Servicio</button>
   </div>
   <div class="product-list">
     <mat-table [dataSource]="products" class="mat-elevation-z3">
@@ -38,7 +39,7 @@
       <mat-row *matRowDef="let row; columns: tableColumns"></mat-row>
     </mat-table>
     <br>
-    <div *ngIf="products.data.length === 0" class="empty"> No se encontraron productos</div>
+    <div *ngIf="products.data.length === 0" class="empty"> No se encontraron servicios</div>
   </div>
-  <mat-paginator [pageSizeOptions]="[10, 20, 50]" (page)="changeSize($event)"></mat-paginator>
+  <mat-paginator [pageSizeOptions]="[10]"  [length]="totalProducts"></mat-paginator>
 </div>

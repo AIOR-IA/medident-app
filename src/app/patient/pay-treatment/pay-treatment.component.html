@@ -1,0 +1,52 @@
+<div class="dialog">
+  <h2 mat-dialog-title>Pagar Tratamiento</h2>
+  <mat-dialog-content>
+    <form [formGroup]="treatmentForm" class="form">
+      <div class="form-field">
+        <label>Presupuesto:</label>
+        <input matInput type="text" formControlName="budget" name="budget"
+          id="budget"  readonly />
+
+      </div>
+      <div class="form-field">
+        <label>Deuda:</label>
+        <input matInput type="text" formControlName="debt" name="debt"
+          id="debt"  readonly />
+
+      </div>
+      <div class="form-field">
+        <label>Creado en:</label>
+        <input matInput type="text" formControlName="createdAt" name="createdAt"
+          id="createdAt"  readonly />
+      </div>
+      <div class="form-field">
+        <label>Pagar:</label>
+        <input matInput type="text" formControlName="pay" name="pay" placeholder="Pagar (100)"
+          id="pay" maxlength="4" required />
+        <mat-error *ngIf="
+            (treatmentForm.get('pay')?.touched ||
+            treatmentForm.get('pay')?.dirty) &&
+            treatmentForm.get('pay')?.errors &&
+            treatmentForm.get('pay')?.invalid
+          ">
+          <div *ngIf="treatmentForm.get('pay')?.hasError('required')" class="error">
+            Campo pagar es requerido
+          </div>
+          <div *ngIf="treatmentForm.get('pay')?.hasError('pattern')" class="error">
+            Pagar solo acepta valores mayores a 0 y máximo 4 dígitos
+          </div>
+        </mat-error>
+      </div>
+    </form>
+
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close class="cancel-button" (mousedown)="false">Cancelar</button>
+    <button mat-button class="success-button" type="submit" (click)="payTreatment()">
+      Pagar
+    </button>
+  </mat-dialog-actions>
+  <button mat-icon-button class="close-button" [mat-dialog-close]="true" (mousedown)="false">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>

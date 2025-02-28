@@ -68,7 +68,6 @@ export class CreatePatientComponent {
     if (this.patientForm.valid) {
       this.trimValues();
       this.shortenBlankSpaces();
-      console.log('patient');
       const firstName = this.patientForm.get('firstName')!.value as string;
       const lastName = this.patientForm.get('lastName')!.value as string;
       const phoneNumber = this.patientForm.get('phoneNumber')!.value as string;

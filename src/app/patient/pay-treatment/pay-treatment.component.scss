@@ -1,0 +1,39 @@
+@import '../../../assets/colors.scss';
+@import '../../../assets/form.scss';
+@import '../../../assets/table.scss';
+
+.dialog {
+    @include dialog();
+    .form {
+        @include form-distribution();
+        .form-field {
+            @include form-field();
+            .error {
+                @include error-messages();
+                display: inline-block;
+            }
+        }
+    }
+    .activeButton{
+      width: 100%;
+      @include status-button($second-color);
+    }
+    .close-button {
+      top: 10px;
+      right: 10px
+    }
+}
+
+.sel-primary:required:invalid {
+    color: #B2B2B2;
+}
+
+.option-values [value=""][disabled] {
+    display: none;
+}
+
+.option-values {
+    color: black;
+}
+
+
