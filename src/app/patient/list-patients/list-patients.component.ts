@@ -22,7 +22,7 @@ export class ListPatientsComponent implements AfterViewInit {
   @ViewChild('txtInput') txtInput: ElementRef<HTMLInputElement>;
   public debouncer: Subject<string> = new Subject();
 
-  tableColumns: string[] = ['patientFullName', 'patientAge', 'patientPhoneNumber', 'patientCi', 'patientStatus', 'patientActions'];
+  tableColumns: string[] = ['patientFullName', 'patientAge', 'patientPhoneNumber', 'patientCi', 'patientActions'];
   public patients = new MatTableDataSource<Patient>();
 
 

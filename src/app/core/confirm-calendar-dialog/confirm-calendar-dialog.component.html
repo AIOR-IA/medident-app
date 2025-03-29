@@ -4,13 +4,13 @@
     <p [innerHTML]="data.description"></p>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button mat-button [ngClass]="data.btnConfirm.class" (click)="onAction('update')" cdkFocusInitial>
+    <!-- <button mat-button [ngClass]="data.btnConfirm.class" (click)="onAction('update')" cdkFocusInitial>
       {{ data.btnConfirm.text }}
-    </button>
+    </button> -->
+    <button mat-dialog-close [ngClass]="data.btnCancel.class">{{ data.btnCancel.text }}</button>
     <button mat-button [ngClass]="data.btnEdit.class" (click)="onAction('delete')" cdkFocusInitial>
       {{ data.btnEdit.text }}
     </button>
-    <button mat-dialog-close [ngClass]="data.btnCancel.class">{{ data.btnCancel.text }}</button>
   </mat-dialog-actions>
   <button mat-icon-button class="close-button" [mat-dialog-close]="false">
     <mat-icon>close</mat-icon>

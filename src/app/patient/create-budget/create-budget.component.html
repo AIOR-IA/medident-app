@@ -118,7 +118,7 @@
   </div>
   <mat-dialog-actions>
     <button mat-button mat-dialog-close class="cancel-button" (mousedown)="false">Cancelar</button>
-    <button mat-button class="success-button" type="submit" (click)="createTreatment()" [disabled]="!selectedProduct.length">
+    <button mat-button class="success-button" type="submit" (click)="createTreatment()" [disabled]="isLoading">
       Crear
     </button>
   </mat-dialog-actions>

@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppLayoutComponent } from './layout/layout.component';
+import { isAdminGuard } from '../guards/is-admin.guard';
 
 const routes: Routes = [
   {
     path: '',
-    component: AppLayoutComponent, // Contiene el sidebar y el router-outlet
+    component: AppLayoutComponent,
     children: [
       {
         path: 'calendar',
@@ -17,13 +18,15 @@ const routes: Routes = [
       },
       {
         path: 'product',
+        canActivate: [isAdminGuard],
         loadChildren: () => import('../product/product.module').then(m => m.ProductModule),
       },
       {
         path: 'user',
+        canActivate: [isAdminGuard],
         loadChildren: () => import('../user/user.module').then(m => m.UserModule),
       },
-      { path: '', redirectTo: 'calendar', pathMatch: 'full' } // Redirección por defecto dentro del Dashboard
+      { path: '', redirectTo: 'calendar', pathMatch: 'full' }
     ]
   }
 ];

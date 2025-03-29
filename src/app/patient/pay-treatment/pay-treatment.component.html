@@ -9,6 +9,12 @@
 
       </div>
       <div class="form-field">
+        <label>A cuenta:</label>
+        <input matInput type="text" formControlName="onAccount" name="onAccount"
+          id="onAccount"  readonly />
+
+      </div>
+      <div class="form-field">
         <label>Deuda:</label>
         <input matInput type="text" formControlName="debt" name="debt"
           id="debt"  readonly />
@@ -42,7 +48,7 @@
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-button mat-dialog-close class="cancel-button" (mousedown)="false">Cancelar</button>
-    <button mat-button class="success-button" type="submit" (click)="payTreatment()">
+    <button mat-button class="success-button" type="submit" [disabled]="isLoading" (click)="payTreatment()">
       Pagar
     </button>
   </mat-dialog-actions>

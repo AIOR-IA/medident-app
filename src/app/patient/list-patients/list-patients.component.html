@@ -34,11 +34,6 @@
         </mat-header-cell>
         <mat-cell *matCellDef="let patient">{{patient.ci}}</mat-cell>
       </ng-container>
-      <ng-container matColumnDef="patientStatus">
-        <mat-header-cell *matHeaderCellDef>Estado
-        </mat-header-cell>
-        <mat-cell *matCellDef="let patient">{{patient.status}}</mat-cell>
-      </ng-container>
       <ng-container matColumnDef="patientActions">
         <mat-header-cell *matHeaderCellDef class="header">Acciones</mat-header-cell>
         <mat-cell *matCellDef="let patient">

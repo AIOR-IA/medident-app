@@ -24,7 +24,7 @@ export class ListTreatmentsComponent implements AfterViewInit {
   public dialogRef = inject(MatDialogRef<ListTreatmentsComponent>);
 
   //products
-  tableColumns: string[] = ['treatmentCreatedAt', 'treatmentBudget', 'treatmentDebt', 'productActions'];
+  tableColumns: string[] = ['treatmentCreatedAt', 'treatmentBudget', 'treatmentOnAccount', 'treatmentDebt', 'productActions'];
   public treatments = new MatTableDataSource<Treatment>();
 
   // table selected products
@@ -44,6 +44,8 @@ export class ListTreatmentsComponent implements AfterViewInit {
   }
 
   async showServices(treatment: Treatment) {
+    this.listEvents = [];
+    this.selectedTreatment = null;
     this.dataSource.data = treatment.products;
     this.selectedTreatment = treatment;
     const events = await this.calendarService.getEventsByRecordId(treatment.idDoc);
@@ -51,8 +53,9 @@ export class ListTreatmentsComponent implements AfterViewInit {
   }
 
   payTreatment(treatment: Treatment) {
+    const detail = `Paciente: ${this.patient.firstName} ${this.patient.lastName}, CI: ${this.patient.ci}`;
     const dialogEditRef = this.dialog.open(PayTreatmentComponent, {
-      data: { treatment, idPatient: this.patient.idDoc }
+      data: { treatment, idPatient: this.patient.idDoc, detail: detail }
     });
 
     dialogEditRef.afterClosed().subscribe(result => {

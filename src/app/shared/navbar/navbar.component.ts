@@ -1,11 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { User } from 'src/app/user/interfaces/user.interface';
 
 interface SidebarItem {
   title: string;
   icon: string;
   path: string;
+  view: string;
 }
 
 @Component({
@@ -14,27 +16,31 @@ interface SidebarItem {
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit{
-  currentUser : string;
+  currentUser: User | null = null;
   paths: SidebarItem[] = [
     {
       path: '/calendar',
       title: 'Calendario',
-      icon: 'calendar_month'
+      icon: 'calendar_month',
+      view: '',
     },
     {
       path: '/patient',
       title: 'Pacientes',
-      icon: 'person'
+      icon: 'person',
+      view: ''
     },
     {
       path: '/product',
       title: 'Servicios',
-      icon: 'inventory_2'
+      icon: 'inventory_2',
+      view: 'admin'
     },
     {
       path: '/user',
       title: 'Usuarios',
-      icon: 'person'
+      icon: 'person',
+      view: 'admin'
     }
   ]
 
@@ -42,7 +48,9 @@ export class NavbarComponent implements OnInit{
   private router = inject(Router);
 
   ngOnInit(): void {
-    this.authService.currentUser().then( user => this.currentUser = user.uid).catch( error => console.log(error));
+    this.authService.currentUser$.subscribe(user => {
+      this.currentUser = user;
+    });
   }
 
   get isAuth() {

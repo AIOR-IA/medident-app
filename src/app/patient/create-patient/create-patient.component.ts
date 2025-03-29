@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PatientService } from '../services/patient.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialogRef } from '@angular/material/dialog';
-import { shortenBlankSpaces, ValidationAge, ValidationAmount, validationPatternNames, ValidationPhone } from 'src/app/shared/utils/validation.utils';
+import { shortenBlankSpaces, ValidationAge, validationPatternNames, ValidationPhone } from 'src/app/shared/utils/validation.utils';
 import { StatusType } from 'src/app/shared/enums/statusPatient.type.enum';
 
 @Component({
@@ -13,7 +13,7 @@ import { StatusType } from 'src/app/shared/enums/statusPatient.type.enum';
 })
 export class CreatePatientComponent {
   public patientForm: FormGroup;
-
+  public isLoading: boolean = false;
 
   public hasAccount: boolean = false;
   public changePasswordFields: boolean = false;
@@ -49,10 +49,6 @@ export class CreatePatientComponent {
         Validators.required,
         Validators.pattern(ValidationAge)
       ]],
-      amount: [0, [
-        Validators.required,
-        Validators.pattern(ValidationAmount),
-      ]],
       phoneNumber: ['', [
         Validators.required,
         Validators.pattern(ValidationPhone)
@@ -65,6 +61,7 @@ export class CreatePatientComponent {
    * This method is to create a new User.
    */
   public savePatient() {
+    this.isLoading = true;
     if (this.patientForm.valid) {
       this.trimValues();
       this.shortenBlankSpaces();
@@ -72,16 +69,17 @@ export class CreatePatientComponent {
       const lastName = this.patientForm.get('lastName')!.value as string;
       const phoneNumber = this.patientForm.get('phoneNumber')!.value as string;
       const ci = this.patientForm.get('ci')!.value as string;
-      const amount = this.patientForm.get('amount')!.value as number;
       const age = this.patientForm.get('age')!.value as number;
 
-      this.patientService.createPatient({ firstName, lastName, phoneNumber, ci, amount, age})
+      this.patientService.createPatient({ firstName, lastName, phoneNumber, ci, age})
         .then((data) => {
           this.reset();
+          this.isLoading = false;
           this.openSnakBar('Paciente creado', 'Aceptar');
           this.dialogRef.close(data);
         })
         .catch((error) => {
+          this.isLoading = false;
           this.openSnakBar('Error, no se pudo crear el paciente', 'Aceptar');
         });
     }
@@ -145,13 +143,6 @@ export class CreatePatientComponent {
    */
   public get phoneNumber() {
     return this.patientForm.get('phoneNumber');
-  }
-
-  /**
-   * Method for get the amount.
-   */
-  public get amount() {
-    return this.patientForm.get('amount');
   }
 
   /**

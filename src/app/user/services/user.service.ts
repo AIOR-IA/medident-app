@@ -5,7 +5,7 @@ import { map, Observable, of, Subscription, switchMap } from 'rxjs';
 import { User } from '../interfaces/user.interface';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateUserModel } from '../interfaces/create-user.model';
-import { QueryConstraint, orderBy as firebaseOrderBy, query, doc, Firestore, collection, collectionData, orderBy, addDoc, updateDoc, where } from '@angular/fire/firestore';
+import { QueryConstraint, orderBy as firebaseOrderBy, query, doc, Firestore, collection, collectionData, orderBy, addDoc, updateDoc, where, getDocs } from '@angular/fire/firestore';
 @Injectable({
   providedIn: 'root'
 })
@@ -16,12 +16,12 @@ export class UserService {
 
   private userSubscription!: Subscription;
   private _user!: User | null;
+
   constructor() { }
 
   createUser(user: User) {
     const { firstName, lastName, ci, email, phoneNumber, color, address, role, password, } = user;
     const uuid = uuidv4();
-    console.log({ email, password });
     return createUserWithEmailAndPassword(this.auth, email, password)
       .then((data) => {
         const newUser = new CreateUserModel(firstName, lastName, ci, email, phoneNumber, color, address, role, password, data.user.uid);
@@ -97,11 +97,23 @@ export class UserService {
   }
 
   public async resetPassword(email: string): Promise<void> {
-    console.log({ email });
     try {
       return await sendPasswordResetEmail(this.auth, email);
     } catch (error) {
       throw error;
     }
+  }
+
+  getUserByEmail(email: string) {
+    const usersRef = collection(this.firestore, 'users'); // Referencia a la colección
+    const q = query(usersRef, where('email', '==', email)); // Consulta con filtro
+
+    return getDocs(q).then((querySnapshot) => {
+      if (!querySnapshot.empty) {
+        return querySnapshot.docs[0].data(); // Retorna los datos del primer usuario encontrado
+      } else {
+        return null; // No se encontró el usuario
+      }
+    });
   }
 }

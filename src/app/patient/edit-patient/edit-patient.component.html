@@ -87,24 +87,6 @@
         </mat-error>
       </div>
       <div class="form-field">
-        <label>Monto:</label>
-        <input matInput type="text" formControlName="amount" name="amount" placeholder="Monto (140)"
-          id="amount" maxlength="50" required />
-        <mat-error *ngIf="
-            (patientForm.get('amount')?.touched ||
-            patientForm.get('amount')?.dirty) &&
-            patientForm.get('amount')?.errors &&
-            patientForm.get('amount')?.invalid
-          ">
-          <div *ngIf="patientForm.get('amount')?.hasError('required')" class="error">
-            Campo monto es requerido
-          </div>
-          <div *ngIf="patientForm.get('amount')?.hasError('pattern')" class="error">
-            El campo monto es solo puede tener 1 a 4 digitos, con valores positivos o mayor o igual a 0
-          </div>
-        </mat-error>
-      </div>
-      <div class="form-field">
         <label>Carnet de Identidad:</label>
         <input matInput type="text" formControlName="ci" name="ci" placeholder="Ci (1244877)"
           id="ci" maxlength="50" required />
@@ -126,7 +108,7 @@
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-button mat-dialog-close class="cancel-button" (mousedown)="false">Cancelar</button>
-    <button mat-button class="success-button" type="submit" (click)="updatePatient()">
+    <button mat-button class="success-button" type="submit" [disabled]="isLoading" (click)="updatePatient()">
         Actualizar
     </button>
   </mat-dialog-actions>

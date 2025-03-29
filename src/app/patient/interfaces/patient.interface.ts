@@ -7,7 +7,6 @@ export interface Patient {
   age: number;
   createdAt?: Date;
   phoneNumber: string;
-  amount: number;
   status?: StatusPatient;
   uid?: string
   idDoc?: string;

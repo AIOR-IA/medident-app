@@ -11,4 +11,5 @@ export interface Treatment {
   idDoc?:string;
   debt: number;
   status: statusTreatment;
+  onAccount: number;
 }

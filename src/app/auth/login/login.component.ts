@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { validationPatternEmail, validationPatternPassword } from 'src/app/shared/utils/validation.utils';
 import { AuthService } from '../services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserService } from 'src/app/user/services/user.service';
+import { User } from 'src/app/user/interfaces/user.interface';
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
@@ -16,6 +18,7 @@ export class LoginComponent {
   private authService = inject(AuthService);
   private snakBar = inject(MatSnackBar);
   private router = inject(Router);
+  private userService = inject(UserService);
   hide = true;
 
   constructor() { }
@@ -27,22 +30,34 @@ export class LoginComponent {
     });
   }
 
-  public login(): void {
+  public async login(): Promise<void> {
     if(this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
     }
     if (this.loginForm.valid) {
       this.trimValues();
-      this.authService.loginUser(this.loginForm.value.email, this.loginForm.value.password).then(
-        (data) => {
-          this.openSnakBar('Inicio de sesión correcto', 'Aceptar'),
-          this.router.navigate(['calendar']);
-        },
-        (error) => {
-          this.openSnakBar('Nombre de correo o contraseña incorrecto', 'Aceptar');
+      try {
+        const data = await this.authService.loginUser(
+          this.loginForm.value.email,
+          this.loginForm.value.password
+        );
+
+        this.openSnakBar('Inicio de sesión correcto', 'Aceptar');
+
+        // ✅ Espera a que getUserByEmail termine y asigne el resultado a user
+        const user = await this.userService.getUserByEmail(data.user.email) as User;
+
+        if (user) {
+          this.authService.setCurrentUser(user);
+          console.log('Usuario seteado:', user);
         }
-      );
+
+        this.router.navigate(['calendar']); // 🔹 Solo se ejecuta después de obtener el usuario
+
+      } catch (error) {
+        this.openSnakBar('Nombre de correo o contraseña incorrecto', 'Aceptar');
+      }
 
     }
   }

@@ -1,6 +1,6 @@
 import { Component, Inject, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { shortenBlankSpaces, ValidationAge, ValidationAmount, validationPatternNames, ValidationPhone } from 'src/app/shared/utils/validation.utils';
+import { shortenBlankSpaces, ValidationAge, validationPatternNames, ValidationPhone } from 'src/app/shared/utils/validation.utils';
 import { PatientService } from '../services/patient.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -13,7 +13,7 @@ import { Patient } from '../interfaces/patient.interface';
 })
 export class EditPatientComponent {
   public patientForm: FormGroup;
-
+  public isLoading: boolean = false;
 
   public hasAccount: boolean = false;
   public changePasswordFields: boolean = false;
@@ -50,10 +50,6 @@ export class EditPatientComponent {
         Validators.required,
         Validators.pattern(ValidationAge)
       ]],
-      amount: [0, [
-        Validators.required,
-        Validators.pattern(ValidationAmount),
-      ]],
       phoneNumber: ['', [
         Validators.required,
         Validators.pattern(ValidationPhone)
@@ -71,7 +67,6 @@ export class EditPatientComponent {
       phoneNumber: this.patient.phoneNumber,
       ci: this.patient.ci,
       age: this.patient.age,
-      amount: this.patient.amount,
     });
   }
 
@@ -79,6 +74,7 @@ export class EditPatientComponent {
    * This method is to create a new User.
    */
   public updatePatient() {
+    this.isLoading = true;
     if (this.patientForm.valid) {
       this.trimValues();
       this.shortenBlankSpaces();
@@ -86,21 +82,23 @@ export class EditPatientComponent {
       const lastName = this.patientForm.get('lastName')!.value as string;
       const phoneNumber = this.patientForm.get('phoneNumber')!.value as string;
       const ci = this.patientForm.get('ci')!.value as string;
-      const amount = this.patientForm.get('amount')!.value as number;
       const age = this.patientForm.get('age')!.value as number;
       const idDoc = this.patient.idDoc;
 
-      this.patientService.updatePatient({ firstName, lastName, phoneNumber, ci, amount, age, idDoc })
+      this.patientService.updatePatient({ firstName, lastName, phoneNumber, ci, age, idDoc })
         .then((data) => {
           this.reset();
+          this.isLoading = false;
           this.openSnakBar('Paciente actualizado', 'Aceptar');
           this.dialogRef.close(data);
         })
         .catch((error) => {
+          this.isLoading = false;
           this.openSnakBar('Error, no se pudo actualizar el paciente', 'Aceptar');
         });
     }
     else {
+      this.isLoading = false;
       this.patientForm.markAllAsTouched();
       return;
     }
@@ -160,13 +158,6 @@ export class EditPatientComponent {
    */
   public get phoneNumber() {
     return this.patientForm.get('phoneNumber');
-  }
-
-  /**
-   * Method for get the amount.
-   */
-  public get amount() {
-    return this.patientForm.get('amount');
   }
 
   /**

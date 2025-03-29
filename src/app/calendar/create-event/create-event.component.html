@@ -99,15 +99,13 @@
   <p> <b>PACIENTE:</b> {{selectedPatient?.firstName | uppercase}} {{ selectedPatient?.lastName | uppercase}} ci:
     {{selectedPatient?.ci}} <br>
   </p>
-  <p *ngFor="let item of selectedTreatmentProduct"> realizar: <b>{{item?.name | uppercase}}</b> precio: {{item?.price}}
-    realizar: {{
-    item?.toDo}} </p>
+  <p *ngFor="let item of selectedTreatmentProduct"> realizar: <b>{{item?.name | uppercase}}</b> a realizar: {{item?.toDo}} </p>
   <p> <b>Hora Inicio:</b> {{ formatDate(time.start) }} <b>Hora Fin:</b> {{formatDate(time.end)}}</p>
 
 
   <mat-dialog-actions class="buttons">
     <button mat-button mat-dialog-close class="cancel-button" (mousedown)="false">Cancelar</button>
-    <button mat-button class="success-button" type="submit" (click)="createEvent()">
+    <button mat-button class="success-button" type="submit" [disabled]="isLoading" (click)="createEvent()">
       Crear
     </button>
   </mat-dialog-actions>

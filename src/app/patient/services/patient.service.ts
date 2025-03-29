@@ -14,8 +14,8 @@ export class PatientService {
   public firestore = inject(Firestore);
 
   createPatient(patient: Patient) {
-    const { firstName, lastName, ci, phoneNumber, age, amount } = patient;
-    const newPatient = new CreatePatientModel(firstName, lastName, ci, age, phoneNumber, amount, 'completed');
+    const { firstName, lastName, ci, phoneNumber, age } = patient;
+    const newPatient = new CreatePatientModel(firstName, lastName, ci, age, phoneNumber, 'completed');
     const patientsRef = collection(this.firestore, 'patients');
 
     return addDoc(patientsRef, { ...newPatient }).then((docRef) => {
@@ -54,8 +54,8 @@ export class PatientService {
   }
 
   createTreatment(treatment: Treatment) {
-    const { idPatient, products, budget, debt } = treatment;
-    const newTreatment = new CreateTreatmentModel(idPatient, products, budget, debt);
+    const { idPatient, products, budget, debt, onAccount } = treatment;
+    const newTreatment = new CreateTreatmentModel(idPatient, products, budget, debt, onAccount);
 
     // Referencia a la subcolección dentro del paciente
     const treatmentsRef = collection(this.firestore, `treatments/${idPatient}/records`);
@@ -95,6 +95,9 @@ export class PatientService {
     const recordRef = doc(this.firestore, `treatments/${idPatient}/records/${idRecord}`);
 
     // Solo retorna la promesa sin manejar errores aquí
-    return updateDoc(recordRef, { debt: increment(-pay) });
+    return updateDoc(recordRef, {
+      debt: increment(-pay),
+      onAccount: increment(pay)
+    });
   }
 }

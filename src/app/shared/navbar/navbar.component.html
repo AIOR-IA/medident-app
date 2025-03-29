@@ -1,15 +1,17 @@
 <div class="header-navbar">
   <div class="header-navbar-left">
-    <div>
-      <!-- <img src="../../../assets/img/Flow.Bo-Logo-RGB-3.png" class="header-navbar-logo-img" alt="An Image"> -->
-       <!-- <p>{{ currentUser }}</p> -->
-    </div>
-    <div class="header-navbar-links ">
-      <a [routerLink]="path.path" routerLinkActive="active_route" *ngFor="let path of paths">{{path.title}}</a>
-      <!-- <div *ngFor="let path of paths">
-        <a [routerLink]="path.path" routerLinkActive="active_route">{{path.title}}</a>
-      </div> -->
+    <div class="header-navbar-logo">
+      <img src="../../../assets/img/medident-LOGO.png" class="header-navbar-logo-img" alt="An Image">
 
+    </div>
+    <div class="header-navbar-links" *ngIf="currentUser">
+      <ng-container *ngFor="let path of paths">
+        <a *ngIf="!path.view || path.view === currentUser?.role"
+           [routerLink]="path.path"
+           routerLinkActive="active_route">
+          {{ path.title }}
+        </a>
+      </ng-container>
     </div>
     <div class="logout">
       <button mat-button (click)="logout()">Cerrar Sesión</button>

@@ -38,6 +38,8 @@ export class CreateEventComponent {
 
   private snakBar = inject(MatSnackBar);
   private calendarService = inject(CalendarService);
+
+  isLoading: boolean = false;
   constructor(
     public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public time: any
@@ -114,23 +116,29 @@ export class CreateEventComponent {
     this.snakBar.open(message, action, { duration: 3000 });
   }
 
-  createEvent() {
+  async createEvent() {
+    this.isLoading = true;
+
     if (this.selectedUser === undefined) {
+      this.isLoading = false;
       this.openSnakBar('Error, debe seleccionar un doctor', 'Aceptar');
       return;
     }
     if (this.selectedPatient === undefined) {
+      this.isLoading = false;
       this.openSnakBar('Error, debe seleccionar un paciente', 'Aceptar');
       return;
     }
     if (this.selectedTreatmentProduct.length === 0) {
+      this.isLoading = false;
       this.openSnakBar('Error, debe seleccionar al menos un tratamiento', 'Aceptar');
       return;
     }
 
+
     const event: Event = {
       idDoc: '',
-      title: `DOCTOR: ${this.selectedUser.firstName} ${this.selectedUser.lastName}, PACIENTE: ${this.selectedPatient.firstName} ${this.selectedPatient.lastName} con CI: ${this.selectedPatient.ci}, TRATAMIENTOS: ${this.selectedTreatmentProduct.map((product) =>  `${product.name.toUpperCase()} precio: ${product.price} realizar: ${product.toDo}`).join(' - ')} `,
+      title: `DOCTOR: ${this.selectedUser.firstName} ${this.selectedUser.lastName}, PACIENTE: ${this.selectedPatient.firstName} ${this.selectedPatient.lastName} con CI: ${this.selectedPatient.ci}, TRATAMIENTOS: ${this.selectedTreatmentProduct.map((product) =>  `${product.name.toUpperCase()} realizar: ${product.toDo}`).join(' - ')} `,
       start: this.time.start,
       end: this.time.end,
       backgroundColor: this.selectedUser.color,
@@ -139,13 +147,15 @@ export class CreateEventComponent {
       idDocUser: this.selectedUser.idDoc,
       products: this.selectedTreatmentProduct
     }
-    this.calendarService.createEvent({ ...event })
+    await this.calendarService.createEvent({ ...event })
       .then(() => {
         this.openSnakBar('Evento creado con éxito', 'Aceptar');
+        this.isLoading = false;
         this.dialogRef.close(true);
       }
       ).catch((error) => {
         console.log({ error });
+        this.isLoading = false;
         this.openSnakBar('Error, no se pudo crear el evento', 'Aceptar');
       }
     );

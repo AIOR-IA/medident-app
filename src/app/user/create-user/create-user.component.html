@@ -207,7 +207,7 @@
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-button mat-dialog-close class="cancel-button" (mousedown)="false">Cancelar</button>
-    <button mat-button class="success-button" type="submit" (click)="saveUser()">
+    <button mat-button class="success-button" type="submit" [disabled]="isLoading" (click)="saveUser()">
       Crear
     </button>
   </mat-dialog-actions>

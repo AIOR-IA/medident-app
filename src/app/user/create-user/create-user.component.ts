@@ -17,7 +17,7 @@ export class CreateUserComponent implements OnInit{
   public userForm: FormGroup;
   public TypeRole = TypeRole;
   public ColorType = ColorsType;
-
+  public isLoading : boolean = false;
   public hasAccount: boolean = false;
   public changePasswordFields: boolean = false;
 
@@ -90,6 +90,7 @@ export class CreateUserComponent implements OnInit{
    * This method is to create a new User.
    */
   public saveUser() {
+    this.isLoading = true;
     if (this.userForm.valid) {
       this.trimValues();
       this.shortenBlankSpaces();
@@ -113,10 +114,12 @@ export class CreateUserComponent implements OnInit{
       this.userService.createUser({ firstName, lastName, phoneNumber, email, ci, address, role, color, password })
         .then((data) => {
           this.reset();
+          this.isLoading = false;
           this.openSnakBar('Usuario creado', 'Aceptar');
-          // this.dialogRef.close(data);
+          this.dialogRef.close(data);
         })
         .catch((error) => {
+          this.isLoading = false;
           this.openSnakBar('Usuario existente, verifique el correo', 'Aceptar');
         });
     }

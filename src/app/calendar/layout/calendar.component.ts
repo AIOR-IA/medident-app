@@ -17,9 +17,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmCalendarDialogComponent } from 'src/app/core/confirm-calendar-dialog/confirm-calendar-dialog.component';
 import { CreateEventComponent } from '../create-event/create-event.component';
 import { ConfirmDialogComponent } from 'src/app/core/confirm-dialog/confirm-dialog.component';
+import { AuthService } from '../../auth/services/auth.service';
+import { User } from 'src/app/user/interfaces/user.interface';
 
 
-interface User {
+interface UserCalendar {
   id: number;
   name: string;
   email: string;
@@ -39,13 +41,15 @@ export class CalendarComponent implements OnInit, AfterViewInit {
 
   currentStartDate = new Date();
   currentEndDate = new Date();
+  public currentUser: User | null = null;
+  private authService = inject(AuthService);
 
   selectedDate = '';
   selectedStartTime = '';
   selectedEndTime = '';
   public calendarService = inject(CalendarService);
   public events: Event[] = []
-  public users: User[] = [
+  public users: UserCalendar[] = [
     {
       id: 1,
       name: 'Juan',
@@ -69,12 +73,12 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     },
 
   ]
-  @ViewChild('calendar') calendarComponent!: FullCalendarComponent; // 👈 Referencia al calendario
+  @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
   private calendarApi: any;
 
   ngAfterViewInit() {
     if (this.calendarComponent) {
-      this.calendarApi = this.calendarComponent.getApi(); // ✅ Ahora sí obtenemos la instancia
+      this.calendarApi = this.calendarComponent.getApi();
     } else {
       console.error('No se pudo obtener la instancia de FullCalendar');
     }
@@ -117,7 +121,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     initialView: 'dayGridMonth',
     // initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
     weekends: true,
-    editable: true,
+    editable: false,
     selectable: true,
     selectMirror: true,
     dayMaxEvents: true,
@@ -145,6 +149,11 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.authService.currentUser$.subscribe(user => {
+      if (user) {
+        this.currentUser = user;
+      }
+    });
   }
 
 
@@ -220,7 +229,6 @@ export class CalendarComponent implements OnInit, AfterViewInit {
    * @param dateInfo
    */
   private onDatesSet(dateInfo: DatesSetArg): void {
-    console.log('Fecha visible:', dateInfo.start, '->', dateInfo.end);
     this.currentEndDate = dateInfo.end;
     this.currentStartDate = dateInfo.start;
     this.getAllEvents(dateInfo.start, dateInfo.end);
@@ -230,7 +238,6 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   getAllEvents(start: Date, end: Date) {
     this.calendarService.getAllEvents(start, end)
       .then(listEvent => {
-        console.log(listEvent);
         const events = listEvent.map(event => ({
           id: event.idDoc,
           title: event.title,
@@ -241,12 +248,12 @@ export class CalendarComponent implements OnInit, AfterViewInit {
 
         this.calendarOptions.update(options => ({
           ...options,
-          events: [] // Limpia todos los eventos previos
+          events: []
         }));
 
         this.calendarOptions.update(options => ({
           ...options,
-          events: events // Mutar la señal correctamente
+          events: events
         }));
       })
       .catch(error => {
@@ -254,16 +261,9 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       });
   }
 
+  // delete events
   handleEventClick(info: EventClickArg) {
-    if (this.isValidDate(info.event.start)) {
-      this.openSnakBar('Erro, no puede modificar un evento pasado a la hora y fecha actual', 'Aceptar');
-      //   this.calendarApi.unselect();
-    } else {
-      console.log('Evento existente seleccionado:', info.event);
-      console.log('Título:', info.event.title);
-      console.log('Fecha inicio:', info.event.start);
-      console.log('Fecha fin:', info.event.end);
-      console.log('id:', info.event.id);
+    if (this.currentUser.role === 'admin') {
       const time = {
         start: info.event.start,
         end: info.event.end,
@@ -276,16 +276,16 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       const dialogRef = this.dialog.open(ConfirmCalendarDialogComponent, {
         width: '420px',
         data: {
-          title: 'Opciones en evento existente',
+          title: `¿ Desea eliminar la cita ?`,
           btnCancel: { text: 'Cancelar', class: ClassButtonType.Black },
-          btnConfirm: { text: confirm, class: ClassButtonType.Blue },
+          // btnConfirm: { text: confirm, class: ClassButtonType.Blue },
           btnEdit: { text: deleteEvent, class: ClassButtonType.Delete },
         },
       });
 
       dialogRef.afterClosed().subscribe((result) => {
         if (result === 'delete') {
-          this.calendarService.getEventById(info.event.id).then( result => {
+          this.calendarService.getEventById(info.event.id).then(result => {
             this.calendarService.deleteTreatmentProducts(result.idDocPatient, result.idDocRecords, result.products, info.event.id)
               .then(() => {
                 this.getAllEvents(this.currentStartDate, this.currentEndDate);
@@ -295,38 +295,33 @@ export class CalendarComponent implements OnInit, AfterViewInit {
                 this.openSnakBar('Error al eliminar el evento', 'Aceptar');
               })
           })
-          .catch(error => {
-            this.openSnakBar('Error al obtener el evento', 'Aceptar');
-          })
+            .catch(error => {
+              this.openSnakBar('Error al obtener el evento', 'Aceptar');
+            })
         }
         if (result === 'update') {
-          console.log('ENVIAMOS UPDATE');
           const dialogEditRef = this.dialog.open(CreateEventComponent, {
             data: time,
           });
           dialogEditRef.afterClosed().subscribe(result => {
-            console.log(result);
+            // console.log(result);
           });
         }
       });
-      // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-      //   clickInfo.event.remove();
-      // }
-    }
+      this.calendarApi.unselect();
 
+
+    }
   }
 
   // Método para capturar el resize del evento
   private onEventResize(info: EventResizeDoneArg) {
-    console.log('Evento redimensionado:', info.event);
-    console.log('Nueva fecha de inicio:', info.event.start);
-    console.log('Nueva fecha de fin:', info.event.end);
+
 
     // Aquí puedes actualizar la base de datos con el nuevo horario
   }
 
   handleEvents(events: EventApi[]) {
-    console.log('handle events');
     this.currentEvents.set(events);
     this.changeDetector.detectChanges(); // workaround for pressionChangedAfterItHasBeenCheckedError
   }
@@ -357,8 +352,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   }
 
   addEvent(title: string, start: string, end: string) {
-    console.log("addEvent");
-    const calendarApi = this.calendarComponent.getApi(); // Obtener la instancia de FullCalendar
+    const calendarApi = this.calendarComponent.getApi();
 
     // Buscar usuario si existe
     const user = this.users.find(user => user.name.toLowerCase() === title.toLowerCase());
@@ -369,7 +363,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     // Agregar evento al calendario
     this.calendarApi.addEvent({
       id: createEventId(),
-      title: user ? user.name : title, // Si el usuario existe, usa su nombre formateado
+      title: user ? user.name : title,
       start: start,
       end: end,
       backgroundColor: eventColor,

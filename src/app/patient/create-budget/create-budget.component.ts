@@ -5,13 +5,14 @@ import { Patient } from '../interfaces/patient.interface';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PatientService } from '../services/patient.service';
-import { debounceTime, Subject, Subscription } from 'rxjs';
+import { debounceTime, generate, Subject, Subscription } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { Product } from 'src/app/product/interfaces/product.interface';
 import { ProductService } from '../../product/services/product.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { DocumentData, QueryDocumentSnapshot } from '@firebase/firestore';
 import { Treatment } from '../interfaces/treatment.interface';
+import generatePDF, { ProductPDF } from 'src/app/core/lib/pdf';
 @Component({
   selector: 'app-create-budget',
   templateUrl: './create-budget.component.html',
@@ -20,7 +21,7 @@ import { Treatment } from '../interfaces/treatment.interface';
 export class CreateBudgetComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public finalBudget: number = 0;
-
+  public isLoading: boolean = false;
   // form patient
   public patientForm: FormGroup;
 
@@ -213,17 +214,29 @@ export class CreateBudgetComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   createTreatment() {
+    if (this.selectedProduct.length === 0) {
+      this.openSnakBar('Error, no se puede crear el tratamiento porque no hay productos seleccionados', 'Aceptar');
+      return;
+    }
+
     const treatment: Treatment = {
       idPatient: this.patient.idDoc!,
       products: this.selectedProduct,
       budget: this.finalBudget,
       debt: this.finalBudget,
-      status: 'review'
+      status: 'review',
+      onAccount: 0,
     }
+    this.isLoading = true;
+    const currentDate: string = this.formatDate(new Date());
+    const productsPDF: ProductPDF[] = this.selectedProduct.map(product => ({ 'name': product.name, 'price': product.price, 'quantity': product.quantity, 'total': (product.price * product.quantity) }));
     this.patientService.createTreatment(treatment).then(() => {
+      generatePDF(productsPDF, currentDate);
       this.openSnakBar('Tratamiento creado exitosamente', 'Aceptar');
+      this.isLoading = false;
       this.dialogRef.close();
     }).catch((error) => {
+      this.isLoading = false;
       this.openSnakBar('Error al crear el tratamiento', 'Aceptar');
     });
   }
@@ -235,5 +248,12 @@ export class CreateBudgetComponent implements OnInit, OnDestroy, AfterViewInit {
     this.searchName = '';
     this.updatePaginator();
     this.getProducts(this.searchName);
+  }
+
+  formatDate(date: Date): string {
+    return new Intl.DateTimeFormat('es-ES', {
+      day: 'numeric', month: 'long', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', hour12: false
+    }).format(date);
   }
 }
