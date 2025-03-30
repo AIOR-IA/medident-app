@@ -1,6 +1,7 @@
 import { inject, Injectable, OnInit } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@angular/fire/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Router } from '@angular/router';
 import { BehaviorSubject, map } from 'rxjs';
 import { User } from 'src/app/user/interfaces/user.interface';
 import { UserService } from 'src/app/user/services/user.service';
@@ -14,7 +15,7 @@ export class AuthService {
 
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
-
+  private router = inject(Router);
   constructor(private userService: UserService) {
     this.loadCurrentUser();
   }
@@ -55,6 +56,13 @@ export class AuthService {
   }
 
   logout() {
-    return this.auth.signOut();
+    localStorage.removeItem('currentUser');
+    this.currentUserSubject.next(null);
+
+    return this.auth.signOut().then(() => {
+      this.router.navigateByUrl('/login');
+    }).catch(error => {
+      console.error("Error al cerrar sesión:", error);
+    });
   }
 }
