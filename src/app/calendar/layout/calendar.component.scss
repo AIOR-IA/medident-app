@@ -60,3 +60,23 @@
 //   z-index: 1000;
 //   pointer-events: none;
 // }
+::ng-deep .fc-timegrid-event .fc-event-main-frame,
+::ng-deep .fc-timegrid-event-harness .fc-event-main {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+::ng-deep .fc-list-event .fc-list-event-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+::ng-deep .fc-event-main,
+::ng-deep .fc-event-title-container {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
